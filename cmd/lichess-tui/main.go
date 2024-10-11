@@ -22,7 +22,7 @@ const (
 )
 
 func newPrimitive(text string) tview.Primitive {
-	return tview.NewBox().SetBorder(true)
+	return tview.NewButton(text)
 }
 func main() {
 	// menu := newPrimitive("Menu")
@@ -30,17 +30,19 @@ func main() {
 	// sideBar := newPrimitive("Side Bar")
 	//
 	grid := tview.NewGrid().
-		SetColumns(8).SetRows(8).
+		SetSize(8, 8, 2 * CELL_SIZE, 8 * CELL_SIZE).
 		SetBorders(true)
 		// AddItem(newPrimitive("Header"), 0, 0, 1, 3, 0, 0, false).
 		// AddItem(newPrimitive("Footer"), 2, 0, 1, 3, 0, 0, false)
 
 	for i := range 8 {
 		for j := range 8 {
-			grid.AddItem(newPrimitive("0"), i, j, 1, 1, 1, 1, false)
+			grid.AddItem(newPrimitive("0"), i, j, 1, 1, 0, 0, false)
 		}
 	}
 
+		grid.AddItem(newPrimitive("Start game"), 8, 0, 1, 8, 0, 0, false)
+	
 	if err := tview.NewApplication().SetRoot(grid, true).EnableMouse(true).Run(); err != nil {
 		panic(err)
 	}

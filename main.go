@@ -23,8 +23,7 @@ const (
 )
 
 func newPrimitive(text string) tview.Primitive {
-	return tview.NewButton(text).
-		SetBackgroundColor(tcell.ColorDefault)
+	return tview.NewButton(text)
 }
 func main() {
 	// menu := newPrimitive("Menu")
@@ -42,7 +41,20 @@ func main() {
 			grid.AddItem(newPrimitive("0"), i, j, 1, 1, 0, 0, false)
 		}
 	}
-
+	theme := tview.Theme{
+		PrimitiveBackgroundColor:    tcell.ColorDefault,
+		ContrastBackgroundColor:     tcell.ColorDefault,
+		MoreContrastBackgroundColor: tcell.ColorDefault,
+		BorderColor:                 tcell.ColorDefault,
+		TitleColor:                  tcell.ColorDefault,
+		GraphicsColor:               tcell.ColorDefault,
+		PrimaryTextColor:            tcell.ColorDefault,
+		SecondaryTextColor:          tcell.ColorDefault,
+		TertiaryTextColor:           tcell.ColorDefault,
+		InverseTextColor:            tcell.ColorDefault,
+		ContrastSecondaryTextColor:  tcell.ColorDefault,
+	}
+	tview.Styles = theme
 	grid.AddItem(newPrimitive("Surrender"), 8, 0, 1, 8, 0, 0, false)
 	grid.AddItem(newPrimitive("Offer draw"), 9, 0, 1, 8, 0, 0, false)
 	grid.AddItem(newPrimitive("Propose takeback"), 10, 0, 1, 8, 0, 0, false)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 	// "fmt"
 )
@@ -22,7 +23,8 @@ const (
 )
 
 func newPrimitive(text string) tview.Primitive {
-	return tview.NewButton(text)
+	return tview.NewButton(text).
+		SetBackgroundColor(tcell.ColorDefault)
 }
 func main() {
 	// menu := newPrimitive("Menu")
@@ -30,7 +32,7 @@ func main() {
 	// sideBar := newPrimitive("Side Bar")
 	//
 	grid := tview.NewGrid().
-		SetSize(8, 8, 2 * CELL_SIZE, 8 * CELL_SIZE).
+		SetSize(8, 8, 2*CELL_SIZE, 8*CELL_SIZE).
 		SetBorders(true)
 		// AddItem(newPrimitive("Header"), 0, 0, 1, 3, 0, 0, false).
 		// AddItem(newPrimitive("Footer"), 2, 0, 1, 3, 0, 0, false)

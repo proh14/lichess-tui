@@ -41,8 +41,10 @@ func main() {
 		}
 	}
 
-		grid.AddItem(newPrimitive("Start game"), 8, 0, 1, 8, 0, 0, false)
-	
+	grid.AddItem(newPrimitive("Surrender"), 8, 0, 1, 8, 0, 0, false)
+	grid.AddItem(newPrimitive("Offer draw"), 9, 0, 1, 8, 0, 0, false)
+	grid.AddItem(newPrimitive("Propose takeback"), 10, 0, 1, 8, 0, 0, false)
+
 	if err := tview.NewApplication().SetRoot(grid, true).EnableMouse(true).Run(); err != nil {
 		panic(err)
 	}

@@ -1,4 +1,4 @@
-module example/hello
+module github.com/proh14/lichess-tui
 
 go 1.23.1
 

@@ -5,7 +5,6 @@ const (
 	CELL_SIZE int    = 1
 )
 
-
 type Piece uint8
 
 const (
@@ -17,3 +16,11 @@ const (
 	King   Piece = 5
 )
 
+const (
+	Pawn_Str   string = "      ███      \n    ███████    \n      ███      \n    ███████    \n  ███████████  "
+	Knight_Str string = "     ██████    \n  ██████████   \n     █████     \n    ███████    \n  ███████████  "
+	Bishop_Str string = "    ██ ████    \n     ██ ██     \n      ███      \n    ███████    \n  ███████████  "
+	RookStr    string = "  ██  ███  ██  \n  ███████████  \n     █████     \n   █████████   \n  ███████████  "
+	QueenStr   string = " ██  ██ ██  ██ \n   █████████   \n     █████     \n    ███████    \n  ███████████  "
+	KingStr    string = "     █████     \n      ███      \n  ███████████  \n    ███████    \n  ███████████  "
+)

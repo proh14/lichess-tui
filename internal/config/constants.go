@@ -17,10 +17,10 @@ const (
 )
 
 const (
-	Pawn_Str   string = "      ███      \n    ███████    \n      ███      \n    ███████    \n  ███████████  "
-	Knight_Str string = "     ██████    \n  ██████████   \n     █████     \n    ███████    \n  ███████████  "
-	Bishop_Str string = "    ██ ████    \n     ██ ██     \n      ███      \n    ███████    \n  ███████████  "
-	RookStr    string = "  ██  ███  ██  \n  ███████████  \n     █████     \n   █████████   \n  ███████████  "
-	QueenStr   string = " ██  ██ ██  ██ \n   █████████   \n     █████     \n    ███████    \n  ███████████  "
-	KingStr    string = "     █████     \n      ███      \n  ███████████  \n    ███████    \n  ███████████  "
+	PawnStr   string = "♙"
+	KnightStr string = "♘"
+	BishopStr string = "♗"
+	RookStr   string = "♖"
+	QueenStr  string = "♕"
+	KingStr   string = "♔"
 )

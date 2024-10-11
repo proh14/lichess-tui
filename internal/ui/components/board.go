@@ -3,7 +3,6 @@ package components
 import (
 	"github.com/proh14/lichess-tui/internal/config"
 	"github.com/rivo/tview"
-	"github.com/proh14/lichess-tui/config/constants"
 )
 
 func newPrimitive(text string) tview.Primitive {
@@ -11,6 +10,12 @@ func newPrimitive(text string) tview.Primitive {
 }
 
 func InitBoard() *tview.Grid {
+	board := make([][]*tview.Grid, 8)
+
+	for i := range 8 {
+		board[i] = make([]*tview.Grid, 8)
+	}
+
 	grid := tview.NewGrid().
 		SetSize(8, 8, 2*config.CELL_SIZE, 8*config.CELL_SIZE).
 		SetBorders(true)
@@ -19,7 +24,7 @@ func InitBoard() *tview.Grid {
 
 	for i := range 8 {
 		for j := range 8 {
-			grid.AddItem(newPrimitive(KingStr), i, j, 1, 1, 0, 0, false)
+			board[i][j] = grid.AddItem(newPrimitive(config.PawnStr), i, j, 1, 1, 0, 0, false)
 		}
 	}
 

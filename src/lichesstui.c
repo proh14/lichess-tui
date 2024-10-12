@@ -1,10 +1,6 @@
 #include <ncurses.h>
+#include <board.c>
 
 int main(void) {
-  initscr();
-
-  printw("HELLO C!!!!!!!!!!!!!");
-  refresh();
-  getch();
-  endwin();
+	/*init_board();*/
 }

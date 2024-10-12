@@ -16,10 +16,11 @@ typedef struct square {
   unsigned row;
 } square;
 
-typedef struct board {
+struct board {
   WINDOW *board_window;
   square **squares;
+};
 
-} board;
+void init_board();
 
 #endif

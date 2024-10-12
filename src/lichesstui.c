@@ -1,6 +1,19 @@
 #include <ncurses.h>
-#include <board.c>
+#include <board.h>
 
 int main(void) {
-	/*init_board();*/
+	initscr();
+	cbreak(); 
+
+	refresh();
+
+	init_board();
+
+	while (true) {
+
+	}
+
+	endwin();
+
+	return 0;
 }

@@ -2,7 +2,7 @@
 #ifndef BOARD_H_
 #define BOARD_H_
 
-#include "pieces.h"
+#include <pieces.h>
 #include <ncurses.h>
 #include <stdbool.h>
 

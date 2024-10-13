@@ -6,6 +6,8 @@
 #include <ncurses.h>
 #include <stdbool.h>
 
+#define SQUARE_SIZE 5 // The size is a unit in charge of both the width (x) and the height (y): x = y
+
 typedef enum { BLACK_SQUARE, WHITE_SQUARE } square_color;
 
 typedef struct square {
@@ -17,7 +19,6 @@ typedef struct square {
 } square;
 
 struct board {
-  WINDOW *board_window;
   square **squares;
 };
 

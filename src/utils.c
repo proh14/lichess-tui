@@ -4,7 +4,7 @@ WINDOW *create_newwin(int x, int y, int width, int height)
 {	WINDOW *local_win;
 
 	local_win = newwin(height, width, y, x);
-	box(local_win, 0 , 0);
+	box(local_win, 0, 0);
 	wrefresh(local_win);
 
 	return local_win;

@@ -10,8 +10,9 @@ int main(void) {
 	init_board();
 
 	while (true) {
-
 	}
+
+	/*printf("%d", board.board_window->width);*/
 
 	endwin();
 

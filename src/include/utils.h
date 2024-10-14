@@ -4,8 +4,15 @@
 
 #include <ncurses.h>
 
-WINDOW *create_newwin(int x, int y, int width, int height);
+#define BOXIZE_WIN(win) {\
+box(win, 0, 0); \
+wrefresh(win); \
+}
 
-void destroy_win(WINDOW *local_win);
+#define DESTROY_WIN(win) {\
+	wclear(win); \
+	wrefresh(win); \
+	delwin(win); \
+}
 
 #endif

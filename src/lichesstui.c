@@ -3,16 +3,15 @@
 
 int main(void) {
 	initscr();
+	
+	noecho();
 	cbreak(); 
 
 	refresh();
 
 	init_board();
 
-	while (true) {
-	}
-
-	/*printf("%d", board.board_window->width);*/
+    getchar();
 
 	endwin();
 

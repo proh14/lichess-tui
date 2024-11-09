@@ -5,7 +5,11 @@
 struct board board;
 
 void init_board() {
-	board.board_window = newwin(SQUARE_HEIGHT * 8, SQUARE_WIDTH * 8, 0, 0);
+	short int board_x;
+	short int board_y;
+	getmaxyx(stdscr, board_y, board_x);
+
+	board.board_window = newwin(SQUARE_HEIGHT * 8, SQUARE_WIDTH * 8, board_y / 2 - SQUARE_HEIGHT * 4, board_x / 2 - SQUARE_WIDTH * 4);
 	BOXIZE_WIN(board.board_window);
 
 	board.squares = malloc(8 * sizeof(struct piece[8]));

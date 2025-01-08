@@ -13,7 +13,7 @@ func main() {
 	var gpg_encryption bool = true
 
 	form := huh.NewForm(
-		huh.NewGroup(huh.NewInput().Description("Token").Value(&name).Placeholder("Token"), // ,
+		huh.NewGroup(huh.NewInput().Description("Token").Value(&name).Placeholder("Token").EchoMode(huh.EchoModePassword), // ,
 			huh.NewFilePicker().
 				Description("Where to store the token?").
 				DirAllowed(true).

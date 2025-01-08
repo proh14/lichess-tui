@@ -9,8 +9,8 @@ import (
 
 func main() {
 	var name string
-	var store_location string
-	var gpg_encryption bool = true
+	var store_location string = "~/.local/share"
+	var gpg_encryption bool = false
 
 	form := huh.NewForm(
 		huh.NewGroup(huh.NewInput().Description("Token").Value(&name).Placeholder("Token"), // ,
@@ -20,7 +20,7 @@ func main() {
 				FileAllowed(false).
 				ShowPermissions(false).
 				ShowHidden(true).
-				CurrentDirectory("/home").
+				CurrentDirectory("~/home").
 				Value(&store_location),
 			huh.NewConfirm().
 				Title("Encrypt with GPG").

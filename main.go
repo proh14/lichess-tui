@@ -13,20 +13,40 @@ import (
 	"os"
 )
 
-type login struct {
+type tokenModel struct {
 	token              string
 	tokenStoreLocation string
-	gpgEncryption      bool
-	warningMessage     string
 }
 
+type pgpEncryptionModel struct {
+	pgpEncryption    bool
+	pgpPassword      string
+	pgpPasswordInput *huh.Input
+}
+
+// func (m pgpEncryptionModel) Init() tea.Cmd {
+// 	return nil
+// }
+//
+// func (m pgpEncryptionModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+// 	m.pgpPasswordInput.WithAccessible(!m.pgpEncryption)
+//
+// 	return m, nil
+// }
+//
+// func (m pgpEncryptionModel) View() string {
+// 	return ""
+// }
+
 func main() {
-	login := login{token: "", tokenStoreLocation: "", gpgEncryption: true, warningMessage: ""}
+	tokenModel := tokenModel{token: "", tokenStoreLocation: ""}
+	pgpEncryptionModel := pgpEncryptionModel{pgpEncryption: true, pgpPassword: "example"}
+	pgpEncryptionModel.pgpPasswordInput = huh.NewInput().Description("Password").Value(&pgpEncryptionModel.pgpPassword)
 
 	pgp := crypto.PGP()
 
 	form := huh.NewForm(
-		huh.NewGroup(huh.NewInput().Description("Token").Value(&login.token).Placeholder("Token").Suggestions([]string{"lip_"}).EchoMode(huh.EchoModePassword).Validate(func(value string) error {
+		huh.NewGroup(huh.NewInput().Description("Token").Value(&tokenModel.token).Placeholder("lip_").EchoMode(huh.EchoModePassword).Validate(func(value string) error {
 			if len(value) == 0 {
 				return errors.New("The token can't be empty.")
 			}
@@ -80,28 +100,29 @@ func main() {
 				ShowPermissions(false).
 				ShowHidden(true).
 				CurrentDirectory("/home").
-				Value(&login.tokenStoreLocation),
+				Value(&tokenModel.tokenStoreLocation),
 			huh.NewConfirm().
 				Title("Encrypt with PGP").
 				Affirmative("Yes").
 				Negative("No").
-				Value(&login.gpgEncryption).Validate(func(value bool) error {
-				file, _ := os.Create(login.tokenStoreLocation + "/token")
+				Value(&pgpEncryptionModel.pgpEncryption).Validate(func(value bool) error {
+				file, _ := os.Create(tokenModel.tokenStoreLocation + "/token")
+				//
+				// pgpEncryptionModel.pgpPasswordInput.EchoMode(huh.EchoModeNone)
 
 				if value {
-					encHandle, _ := pgp.Encryption().Password([]byte("hunter2")).New()
-					pgpMessage, _ := encHandle.Encrypt([]byte("my message"))
+					encHandle, _ := pgp.Encryption().Password([]byte(pgpEncryptionModel.pgpPassword)).New()
+					pgpMessage, _ := encHandle.Encrypt([]byte(tokenModel.token))
 					armored, _ := pgpMessage.ArmorBytes()
 
 					file.WriteString(string(armored))
 				} else {
-					file.WriteString(login.token)
+					file.WriteString(tokenModel.token)
 				}
 
 				return nil
 			}),
-			// Validate(),
-			huh.NewNote().Description(login.warningMessage),
+			pgpEncryptionModel.pgpPasswordInput,
 		),
 	).WithProgramOptions(tea.WithAltScreen())
 

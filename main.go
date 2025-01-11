@@ -107,8 +107,8 @@ func main() {
 				Negative("No").
 				Value(&pgpEncryptionModel.pgpEncryption).Validate(func(value bool) error {
 				file, _ := os.Create(tokenModel.tokenStoreLocation + "/token")
-				//
-				// pgpEncryptionModel.pgpPasswordInput.EchoMode(huh.EchoModeNone)
+
+				// pgpEncryptionModel.pgpPasswordInput.Blur()
 
 				if value {
 					encHandle, _ := pgp.Encryption().Password([]byte(pgpEncryptionModel.pgpPassword)).New()

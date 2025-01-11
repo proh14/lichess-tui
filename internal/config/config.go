@@ -77,7 +77,7 @@ func setupConfig(path string) {
 		token = security.EncryptToken(token, pgpPassword)
 	}
 
-	file, err := os.Create(tokenPath)
+	file, _ := os.Create(tokenPath)
 	file.WriteString(token)
 
 	defer file.Close()

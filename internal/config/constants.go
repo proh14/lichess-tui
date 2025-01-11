@@ -2,6 +2,7 @@ package config
 
 import (
   "os"
+	"path"
 )
 
 const (
@@ -11,5 +12,5 @@ const (
 // Not a constant lol
 func GetConfigPath() string {
   configDir, _ := os.UserConfigDir()
-  return configDir + RELATIVE_CONFIG_PATH
+  return path.Join(configDir, RELATIVE_CONFIG_PATH)
 }

@@ -9,6 +9,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"errors"
+	"os/user"
 )
 
 type Config struct {
@@ -24,21 +26,31 @@ func setupConfig(path string) {
 
 	var token string
 	var tokenPath string
-	var shouldEncrypt bool
+	var shouldEncrypt bool = true
+
+	currentUser, _ := user.Current()
+	homeDir := currentUser.HomeDir
 
 	tokenField := huh.NewInput().Description("Token").Placeholder("lip_").EchoMode(huh.EchoModePassword).Validate(lichess.ValidateToken).Value(&token)
-	tokenFileField := huh.NewFilePicker().
-		Description("Where to store the token?").
-		DirAllowed(true).
-		FileAllowed(false).
-		ShowPermissions(false).
-		ShowHidden(true).
-		CurrentDirectory("/home").
-		Value(&tokenPath)
+	tokenFileField := huh.NewInput().Description("Location of the token persistence file").Placeholder("/home/username/lichess-tui-token").Value(&tokenPath).Validate(func(value string) error {
+				if len(value) == 0 {
+					return errors.New("The filename can't be empty.")
+				}
+
+				if string(value[0]) == "~" {
+					return errors.New("You may need to replace ~ with " + homeDir + ".")
+				}
+
+				_, err := os.Stat(filepath.Dir(value))
+				if os.IsNotExist(err) {
+					return errors.New("The directory doesn't exist.")
+				}
+
+				return nil
+			})
+
 	shouldEncryptConfirm := huh.NewConfirm().
 		Title("Encrypt with PGP").
-		Affirmative("Yes").
-		Negative("No").
 		Value(&shouldEncrypt)
 
 	group := huh.NewGroup(tokenField, tokenFileField, shouldEncryptConfirm)
@@ -63,11 +75,9 @@ func setupConfig(path string) {
 		}
 
 		token = security.EncryptToken(token, pgpPassword)
-
-		return
 	}
 
-	file, _ := os.Create(tokenPath + "/token")
+	file, err := os.Create(tokenPath)
 	file.WriteString(token)
 
 	defer file.Close()

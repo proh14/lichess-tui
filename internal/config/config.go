@@ -8,6 +8,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 type Config struct {
@@ -84,6 +85,9 @@ func SaveConfig(path string) error {
 	if err != nil {
 		return err
 	}
+
+	dir := filepath.Dir(path)
+	os.MkdirAll(dir, 0755)
 
 	err = os.WriteFile(path, data, 0644)
 	return err

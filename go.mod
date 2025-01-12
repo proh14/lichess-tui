@@ -17,7 +17,7 @@ require (
 	github.com/charmbracelet/bubbles v0.20.0 // indirect
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
 	github.com/charmbracelet/x/ansi v0.6.0 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20250109123447-9d5df1da7993 // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20250112114943-1775be7e67ae // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/cloudflare/circl v1.5.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect

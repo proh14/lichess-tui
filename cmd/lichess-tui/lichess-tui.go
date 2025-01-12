@@ -13,7 +13,6 @@ func main() {
 	p := tea.NewProgram(app.NewModel())
 
 	_, err := p.Run()
-
 	if err != nil {
 		panic(err)
 	}

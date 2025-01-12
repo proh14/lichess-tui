@@ -1,11 +1,11 @@
 package lichess
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
-	"bytes"
 )
 
 func TokenExists(token string) bool {
@@ -34,10 +34,9 @@ func TokenExists(token string) bool {
 	json.Unmarshal(respBody, &respMap)
 
 	_, containsKey := respMap["error"]
-	
+
 	return !containsKey
 }
-
 
 func SendMessage(user string, text string, token string) {
 	headers := map[string]string{
@@ -63,6 +62,6 @@ func SendMessage(user string, text string, token string) {
 	if err != nil {
 		log.Fatalf("Error making request: %v", err)
 	}
-	
+
 	defer resp.Body.Close()
 }

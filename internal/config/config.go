@@ -2,13 +2,14 @@ package config
 
 import (
 	"errors"
+	"log"
+	"os"
+	"path/filepath"
+
 	"github.com/charmbracelet/huh"
 	"github.com/proh14/lichess-tui/internal/lichess"
 	"github.com/proh14/lichess-tui/internal/security"
 	"gopkg.in/yaml.v2"
-	"log"
-	"os"
-	"path/filepath"
 )
 
 type Config struct {
@@ -66,7 +67,6 @@ func setupConfig(path string) {
 		form = huh.NewForm(huh.NewGroup(pgpPasswordInput))
 
 		err = form.Run()
-
 		if err != nil {
 			log.Fatalf("Error running form: %v", err)
 		}
@@ -106,13 +106,12 @@ func validateFile(value string) error {
 
 func SaveConfig(path string) error {
 	data, err := yaml.Marshal(cfg)
-
 	if err != nil {
 		return err
 	}
 
 	dir := filepath.Dir(path)
-	os.MkdirAll(dir, 0755)
+	os.MkdirAll(dir, 0o755)
 
 	file, _ := os.Create(path)
 	file.WriteString(string(data))
@@ -123,7 +122,6 @@ func SaveConfig(path string) error {
 func LoadConfig(path string) error {
 	cfg = &Config{}
 	data, err := os.ReadFile(path)
-
 	if err != nil {
 		if os.IsNotExist(err) {
 			setupConfig(path)
@@ -167,7 +165,6 @@ func loadToken() {
 	form := huh.NewForm(huh.NewGroup(pgpPasswordInput))
 
 	err := form.Run()
-
 	if err != nil {
 		log.Fatalf("Error running form: %v", err)
 	}

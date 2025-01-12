@@ -15,4 +15,3 @@ func ValidateToken(value string) error {
 
 	return errors.New("The given token is invalid.")
 }
-

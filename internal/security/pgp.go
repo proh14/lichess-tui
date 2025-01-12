@@ -21,12 +21,10 @@ func DecryptToken(encryptedToken string, password string) (string, error) {
 	passphrase := []byte(password)
 
 	decHandle, err := pgp.Decryption().Password(passphrase).New()
-
 	if err != nil {
 		return "", err
 	}
 	decrypted, err := decHandle.Decrypt(armored, crypto.Armor)
-
 	if err != nil {
 		return "", err
 	}

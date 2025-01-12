@@ -17,7 +17,7 @@ func GetConfigPath() string {
 }
 
 func AddDataDir(add string) string {
-  homeDir, _ := os.UserHomeDir()
-  localDir := path.Join(homeDir, ".local/share/")
-	return path.Join(localDir, add);
+	homeDir, _ := os.UserHomeDir()
+	localDir := path.Join(homeDir, ".local/share/")
+	return path.Join(localDir, add)
 }

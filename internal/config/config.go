@@ -20,7 +20,7 @@ type Config struct {
 var cfg *Config
 
 func GetConfig() *Config {
-  return cfg
+	return cfg
 }
 
 func setupConfig(path string) {
@@ -59,9 +59,9 @@ func setupConfig(path string) {
 		var pgpPassword string
 
 		pgpPasswordInput := huh.NewInput().
-    Description("PGP Password").
-    EchoMode(huh.EchoModePassword).
-    Value(&pgpPassword)
+			Description("PGP Password").
+			EchoMode(huh.EchoModePassword).
+			Value(&pgpPassword)
 
 		form = huh.NewForm(huh.NewGroup(pgpPasswordInput))
 
@@ -133,43 +133,43 @@ func LoadConfig(path string) error {
 
 	err = yaml.Unmarshal(data, cfg)
 
-  loadToken()
+	loadToken()
 
-  err = lichess.ValidateToken(cfg.Token)
-  if err != nil {
-    log.Fatalf("Invalid token: %v", err)
-  }
+	err = lichess.ValidateToken(cfg.Token)
+	if err != nil {
+		log.Fatalf("Invalid token: %v", err)
+	}
 
 	return err
 }
 
-func loadToken(){
-  token, _ := os.ReadFile(cfg.TokenPath)
-  if !cfg.ShouldTokenBeEncrypted {
-    cfg.Token = string(token)
- }
+func loadToken() {
+	token, _ := os.ReadFile(cfg.TokenPath)
+	if !cfg.ShouldTokenBeEncrypted {
+		cfg.Token = string(token)
+	}
 
-   pgpPassword := ""
+	pgpPassword := ""
 
-    pgpPasswordInput := huh.NewInput().
-    Description("PGP Password").
-    EchoMode(huh.EchoModePassword).
-    Value(&pgpPassword).
-    Validate(func(password string) error {
-      _, err := security.DecryptToken(string(token), password)
-      if err != nil {
-        return errors.New("Incorrect password")
-      }
-      return nil
-    })
+	pgpPasswordInput := huh.NewInput().
+		Description("PGP Password").
+		EchoMode(huh.EchoModePassword).
+		Value(&pgpPassword).
+		Validate(func(password string) error {
+			_, err := security.DecryptToken(string(token), password)
+			if err != nil {
+				return errors.New("Incorrect password")
+			}
+			return nil
+		})
 
-    form := huh.NewForm(huh.NewGroup(pgpPasswordInput))
+	form := huh.NewForm(huh.NewGroup(pgpPasswordInput))
 
-    err := form.Run()
+	err := form.Run()
 
-    if err != nil {
-      log.Fatalf("Error running form: %v", err)
-    }
+	if err != nil {
+		log.Fatalf("Error running form: %v", err)
+	}
 
-    cfg.Token, _ = security.DecryptToken(string(token), pgpPassword)
+	cfg.Token, _ = security.DecryptToken(string(token), pgpPassword)
 }

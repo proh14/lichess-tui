@@ -17,21 +17,21 @@ func EncryptToken(token string, password string) string {
 func DecryptToken(encryptedToken string, password string) (string, error) {
 	pgp := crypto.PGP()
 
-  armored := []byte(encryptedToken)
-  passphrase := []byte(password)
+	armored := []byte(encryptedToken)
+	passphrase := []byte(password)
 
 	decHandle, err := pgp.Decryption().Password(passphrase).New()
 
-  if err != nil {
-    return "", err
-  }
+	if err != nil {
+		return "", err
+	}
 	decrypted, err := decHandle.Decrypt(armored, crypto.Armor)
 
-  if err != nil {
-    return "", err
-  }
+	if err != nil {
+		return "", err
+	}
 
 	myMessage := decrypted.Bytes()
 
-  return string(myMessage), nil
+	return string(myMessage), nil
 }

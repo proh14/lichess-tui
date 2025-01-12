@@ -38,7 +38,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-  mycfg := config.GetConfig()
-  token := mycfg.Token
+	mycfg := config.GetConfig()
+	token := mycfg.Token
 	return fmt.Sprintf("Token is %s", token)
 }

@@ -2,52 +2,39 @@ package config
 
 import (
 	"errors"
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/huh"
 	"github.com/proh14/lichess-tui/internal/lichess"
 	"github.com/proh14/lichess-tui/internal/security"
 	"gopkg.in/yaml.v2"
 	"log"
 	"os"
-	"os/user"
 	"path/filepath"
 )
 
 type Config struct {
-	token                  string
-	shouldTokenBeEncrypted bool   `yaml:"shouldTokenBeEncrypted"`
-	tokenPath              string `yaml:"tokenPath"`
+	Token                  string `yaml:"-"`
+	ShouldTokenBeEncrypted bool   `yaml:"shouldTokenBeEncrypted"`
+	TokenPath              string `yaml:"tokenPath"`
 }
 
 var cfg *Config
 
 func setupConfig(path string) {
-	cfg = &Config{}
-
 	var token string
-	var tokenPath string
+	var tokenPath string = AddDataDir(RELATIVE_TOKEN_PATH)
 	var shouldEncrypt bool = true
 
-	currentUser, _ := user.Current()
-	homeDir := currentUser.HomeDir
+	tokenField := huh.NewInput().
+		Description("Token").
+		Placeholder("lip_").
+		EchoMode(huh.EchoModePassword).
+		Validate(lichess.ValidateToken).
+		Value(&token)
 
-	tokenField := huh.NewInput().Description("Token").Placeholder("lip_").EchoMode(huh.EchoModePassword).Validate(lichess.ValidateToken).Value(&token)
-	tokenFileField := huh.NewInput().Description("Location of the token persistence file").Placeholder("/home/username/lichess-tui-token").Value(&tokenPath).Validate(func(value string) error {
-		if len(value) == 0 {
-			return errors.New("The filename can't be empty.")
-		}
-
-		if string(value[0]) == "~" {
-			return errors.New("You may need to replace ~ with " + homeDir + ".")
-		}
-
-		_, err := os.Stat(filepath.Dir(value))
-		if os.IsNotExist(err) {
-			return errors.New("The directory doesn't exist.")
-		}
-
-		return nil
-	})
+	tokenFileField := huh.NewInput().
+		Description("Location of the token persistence file").
+		Value(&tokenPath).
+		Validate(validateFile)
 
 	shouldEncryptConfirm := huh.NewConfirm().
 		Title("Encrypt with PGP").
@@ -55,7 +42,7 @@ func setupConfig(path string) {
 
 	group := huh.NewGroup(tokenField, tokenFileField, shouldEncryptConfirm)
 
-	form := huh.NewForm(group).WithProgramOptions(tea.WithAltScreen())
+	form := huh.NewForm(group)
 
 	err := form.Run()
 	if err != nil {
@@ -66,8 +53,14 @@ func setupConfig(path string) {
 
 	if shouldEncrypt {
 		var pgpPassword string
-		pgpPasswordInput := huh.NewInput().Description("PGP Password").EchoMode(huh.EchoModePassword).Value(&pgpPassword)
-		form = huh.NewForm(huh.NewGroup(pgpPasswordInput)).WithProgramOptions(tea.WithAltScreen())
+
+		pgpPasswordInput := huh.NewInput().
+    Description("PGP Password").
+    EchoMode(huh.EchoModePassword).
+    Value(&pgpPassword)
+
+		form = huh.NewForm(huh.NewGroup(pgpPasswordInput))
+
 		err = form.Run()
 
 		if err != nil {
@@ -82,15 +75,33 @@ func setupConfig(path string) {
 
 	defer file.Close()
 
-	cfg.token = originalToken
-	cfg.shouldTokenBeEncrypted = shouldEncrypt
-	cfg.tokenPath = tokenPath
+	cfg.Token = originalToken
+	cfg.ShouldTokenBeEncrypted = shouldEncrypt
+	cfg.TokenPath = tokenPath
 
 	err = SaveConfig(path)
 }
 
+func validateFile(value string) error {
+	if len(value) == 0 {
+		return errors.New("The filename can't be empty.")
+	}
+
+	if string(value[0]) == "~" {
+		homeDir := os.Getenv("HOME")
+		return errors.New("You may need to replace ~ with " + homeDir + ".")
+	}
+
+	_, err := os.Stat(filepath.Dir(value))
+	if os.IsNotExist(err) {
+		return errors.New("The directory doesn't exist.")
+	}
+
+	return nil
+}
+
 func SaveConfig(path string) error {
-	data, err := yaml.Marshal(&cfg)
+	data, err := yaml.Marshal(cfg)
 
 	if err != nil {
 		return err
@@ -106,6 +117,7 @@ func SaveConfig(path string) error {
 }
 
 func LoadConfig(path string) error {
+	cfg = &Config{}
 	data, err := os.ReadFile(path)
 
 	if err != nil {

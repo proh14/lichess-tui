@@ -1,7 +1,9 @@
 package app
 
 import (
+	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/proh14/lichess-tui/internal/config"
 )
 
 type viewState uint
@@ -36,5 +38,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	return "Hello, World!"
+  mycfg := config.GetConfig()
+  token := mycfg.Token
+	return fmt.Sprintf("Token is %s", token)
 }

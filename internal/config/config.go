@@ -19,6 +19,10 @@ type Config struct {
 
 var cfg *Config
 
+func GetConfig() *Config {
+  return cfg
+}
+
 func setupConfig(path string) {
 	var token string
 	var tokenPath string = AddDataDir(RELATIVE_TOKEN_PATH)
@@ -129,5 +133,38 @@ func LoadConfig(path string) error {
 
 	err = yaml.Unmarshal(data, cfg)
 
+  loadToken()
+
 	return err
+}
+
+func loadToken(){
+  token, _ := os.ReadFile(cfg.TokenPath)
+  if !cfg.ShouldTokenBeEncrypted {
+    cfg.Token = string(token)
+ }
+
+   pgpPassword := ""
+
+    pgpPasswordInput := huh.NewInput().
+    Description("PGP Password").
+    EchoMode(huh.EchoModePassword).
+    Value(&pgpPassword).
+    Validate(func(password string) error {
+      _, err := security.DecryptToken(string(token), password)
+      if err != nil {
+        return errors.New("Incorrect password")
+      }
+      return nil
+    })
+
+    form := huh.NewForm(huh.NewGroup(pgpPasswordInput))
+
+    err := form.Run()
+
+    if err != nil {
+      log.Fatalf("Error running form: %v", err)
+    }
+
+    cfg.Token, _ = security.DecryptToken(string(token), pgpPassword)
 }

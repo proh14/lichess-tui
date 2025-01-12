@@ -145,32 +145,32 @@ func LoadConfig(path string) error {
 
 func loadToken() {
 	token, _ := os.ReadFile(cfg.TokenPath)
-	if cfg.ShouldTokenBeEncrypted {
-		pgpPassword := ""
-
-		pgpPasswordInput := huh.NewInput().
-			Description("PGP Password").
-			EchoMode(huh.EchoModePassword).
-			Value(&pgpPassword).
-			Validate(func(password string) error {
-				var err error
-				cfg.Token, err = security.DecryptToken(string(token), password)
-				if err != nil {
-					cfg.Token = ""
-					return errors.New("Incorrect password.")
-				}
-				return nil
-			})
-
-		form := huh.NewForm(huh.NewGroup(pgpPasswordInput))
-
-		err := form.Run()
-
-		if err != nil {
-			log.Fatalf("Error running form: %v", err)
-		}
-
-	} else {
+	if !cfg.ShouldTokenBeEncrypted {
 		cfg.Token = string(token)
+		return
 	}
+
+	pgpPassword := ""
+
+	pgpPasswordInput := huh.NewInput().
+		Description("PGP Password").
+		EchoMode(huh.EchoModePassword).
+		Value(&pgpPassword).
+		Validate(func(password string) error {
+			_, err := security.DecryptToken(string(token), password)
+			if err != nil {
+				return errors.New("Incorrect password")
+			}
+			return nil
+		})
+
+	form := huh.NewForm(huh.NewGroup(pgpPasswordInput))
+
+	err := form.Run()
+
+	if err != nil {
+		log.Fatalf("Error running form: %v", err)
+	}
+
+	cfg.Token, _ = security.DecryptToken(string(token), pgpPassword)
 }

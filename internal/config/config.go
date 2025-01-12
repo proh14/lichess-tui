@@ -135,6 +135,11 @@ func LoadConfig(path string) error {
 
   loadToken()
 
+  err = lichess.ValidateToken(cfg.Token)
+  if err != nil {
+    log.Fatalf("Invalid token: %v", err)
+  }
+
 	return err
 }
 

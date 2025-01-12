@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/huh"
 	"github.com/proh14/lichess-tui/internal/lichess"
@@ -8,9 +9,8 @@ import (
 	"gopkg.in/yaml.v2"
 	"log"
 	"os"
-	"path/filepath"
-	"errors"
 	"os/user"
+	"path/filepath"
 )
 
 type Config struct {
@@ -33,21 +33,21 @@ func setupConfig(path string) {
 
 	tokenField := huh.NewInput().Description("Token").Placeholder("lip_").EchoMode(huh.EchoModePassword).Validate(lichess.ValidateToken).Value(&token)
 	tokenFileField := huh.NewInput().Description("Location of the token persistence file").Placeholder("/home/username/lichess-tui-token").Value(&tokenPath).Validate(func(value string) error {
-				if len(value) == 0 {
-					return errors.New("The filename can't be empty.")
-				}
+		if len(value) == 0 {
+			return errors.New("The filename can't be empty.")
+		}
 
-				if string(value[0]) == "~" {
-					return errors.New("You may need to replace ~ with " + homeDir + ".")
-				}
+		if string(value[0]) == "~" {
+			return errors.New("You may need to replace ~ with " + homeDir + ".")
+		}
 
-				_, err := os.Stat(filepath.Dir(value))
-				if os.IsNotExist(err) {
-					return errors.New("The directory doesn't exist.")
-				}
+		_, err := os.Stat(filepath.Dir(value))
+		if os.IsNotExist(err) {
+			return errors.New("The directory doesn't exist.")
+		}
 
-				return nil
-			})
+		return nil
+	})
 
 	shouldEncryptConfirm := huh.NewConfirm().
 		Title("Encrypt with PGP").
@@ -90,7 +90,7 @@ func setupConfig(path string) {
 }
 
 func SaveConfig(path string) error {
-	data, err := yaml.Marshal(cfg)
+	data, err := yaml.Marshal(&cfg)
 
 	if err != nil {
 		return err
@@ -99,7 +99,9 @@ func SaveConfig(path string) error {
 	dir := filepath.Dir(path)
 	os.MkdirAll(dir, 0755)
 
-	err = os.WriteFile(path, data, 0644)
+	file, _ := os.Create(path)
+	file.WriteString(string(data))
+
 	return err
 }
 

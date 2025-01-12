@@ -21,20 +21,20 @@ func NewModel() *Model {
 }
 
 func (m Model) Init() tea.Cmd {
-  return nil
+	return nil
 }
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-  switch msg := msg.(type) {
-  case tea.KeyMsg:
-    if msg.String() == "q" {
-      return m, tea.Quit
-    }
-  }
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if msg.String() == "q" {
+			return m, tea.Quit
+		}
+	}
 
-  return m, nil
+	return m, nil
 }
 
 func (m Model) View() string {
-  return "Hello, World!"
+	return "Hello, World!"
 }

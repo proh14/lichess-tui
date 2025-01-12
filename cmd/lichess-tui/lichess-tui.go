@@ -14,7 +14,7 @@ func main() {
 
 	_, err := p.Run()
 
-  if err != nil {
-    panic(err)
-  }
+	if err != nil {
+		panic(err)
+	}
 }

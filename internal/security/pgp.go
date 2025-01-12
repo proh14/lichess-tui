@@ -11,6 +11,5 @@ func EncryptToken(token string, password string) string {
 	pgpMessage, _ := encHandle.Encrypt([]byte(token))
 	armored, _ := pgpMessage.ArmorBytes()
 
-
 	return string(armored)
 }

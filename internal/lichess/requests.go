@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"github.com/proh14/lichess-tui/internal/errors"
 )
 
 func TokenExists(token string) bool {
@@ -15,7 +16,10 @@ func TokenExists(token string) bool {
 	}
 
 	url := "https://lichess.org/api/account"
-	req, _ := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	for key, value := range headers {
 		req.Header.Set(key, value)
@@ -24,7 +28,7 @@ func TokenExists(token string) bool {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Error making request: %v", err)
+		errors.RequestError(err)
 	}
 	defer resp.Body.Close()
 
@@ -33,6 +37,7 @@ func TokenExists(token string) bool {
 	var respMap map[string]string
 	json.Unmarshal(respBody, &respMap)
 
+	// An error is returned in case a token doesn't exist
 	_, containsKey := respMap["error"]
 
 	return !containsKey
@@ -51,7 +56,10 @@ func SendMessage(user string, text string, token string) {
 	bodyBytes, _ := json.Marshal(body)
 
 	url := "https://lichess.org/inbox/" + user
-	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(bodyBytes))
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bodyBytes))
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	for key, value := range headers {
 		req.Header.Set(key, value)

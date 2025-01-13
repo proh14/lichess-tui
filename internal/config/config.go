@@ -157,7 +157,7 @@ func loadToken() {
 		Validate(func(password string) error {
 			_, err := security.DecryptToken(string(token), password)
 			if err != nil {
-				return errors.New("Incorrect password")
+				return errors.New("Incorrect password.")
 			}
 			return nil
 		})

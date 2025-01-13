@@ -4,26 +4,23 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 	"github.com/proh14/lichess-tui/internal/errors"
 )
 
-func TokenExists(token string) bool {
-	headers := map[string]string{
-		"Authorization": "Bearer " + token,
-		"Content-Type":  "application/json",
-	}
+func setHeaders(req *http.Request, token string) {
+	req.Header.Set("Authorization", "Bearer " + token)
+	req.Header.Set("Content-Type", "application/json")
+}
 
+func TokenExists(token string) bool {
 	url := "https://lichess.org/api/account"
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		errors.RequestError(err)
 	}
 
-	for key, value := range headers {
-		req.Header.Set(key, value)
-	}
+	setHeaders(req, token)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -43,32 +40,70 @@ func TokenExists(token string) bool {
 	return !containsKey
 }
 
-func SendMessage(user string, text string, token string) {
-	headers := map[string]string{
-		"Authorization": "Bearer " + token,
-		"Content-Type":  "application/json",
-	}
+// Messages
+type SendMessageConfig struct {
+	user string
+	text string
+}
 
+func SendMessage(config SendMessageConfig, token string) {
 	body := map[string]string{
-		"text": text,
+		"text": config.text,
 	}
 
 	bodyBytes, _ := json.Marshal(body)
 
-	url := "https://lichess.org/inbox/" + user
+	url := "https://lichess.org/inbox/" + config.user
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bodyBytes))
 	if err != nil {
 		errors.RequestError(err)
 	}
 
-	for key, value := range headers {
-		req.Header.Set(key, value)
-	}
+	setHeaders(req, token)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Error making request: %v", err)
+		errors.RequestError(err)
+	}
+
+	defer resp.Body.Close()
+}
+
+type SeekGameConfig struct {
+	rated string // bool
+	time string // number
+	increment string // number
+	days string // number
+	variant string 
+	ratingRange string // example: 1500-1800
+}
+
+// Game operations
+func SeekGame(config SeekGameConfig, token string) {
+	body := map[string]string{
+		"rated": config.rated,
+		"time": config.time,
+		"increment": config.increment,
+		"days": config.days,
+		"variant": config.variant,
+		"ratingRange": config.ratingRange,
+	}
+
+	bodyBytes, _ := json.Marshal(body)
+
+	url := "https://lichess.org/api/board/seek"
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bodyBytes))
+	if err != nil {
+		errors.RequestError(err)
+	}
+
+	setHeaders(req, token)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		errors.RequestError(err)
 	}
 
 	defer resp.Body.Close()

@@ -8,17 +8,27 @@ import (
 	"github.com/proh14/lichess-tui/internal/errors"
 )
 
+const (
+	GET = "GET"
+	POST = "POST"
+)
+
 func setHeaders(req *http.Request, token string) {
 	req.Header.Set("Authorization", "Bearer " + token)
 	req.Header.Set("Content-Type", "application/json")
 }
 
-func TokenExists(token string) bool {
-	url := "https://lichess.org/api/account"
-	req, err := http.NewRequest("GET", url, nil)
+func request(method string, url string, body io.Reader) *http.Request {
+	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		errors.RequestError(err)
 	}
+
+	return req
+}
+
+func TokenExists(token string) bool {
+	req := request(GET, "https://lichess.org/api/account", nil)
 
 	setHeaders(req, token)
 
@@ -50,14 +60,8 @@ func SendMessage(config SendMessageConfig, token string) {
 	body := map[string]string{
 		"text": config.text,
 	}
-
 	bodyBytes, _ := json.Marshal(body)
-
-	url := "https://lichess.org/inbox/" + config.user
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bodyBytes))
-	if err != nil {
-		errors.RequestError(err)
-	}
+	req := request(POST, "https://lichess.org/inbox/" + config.user, bytes.NewBuffer(bodyBytes))
 
 	setHeaders(req, token)
 
@@ -89,14 +93,9 @@ func SeekGame(config SeekGameConfig, token string) {
 		"variant": config.variant,
 		"ratingRange": config.ratingRange,
 	}
-
 	bodyBytes, _ := json.Marshal(body)
+	req := request(POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
 
-	url := "https://lichess.org/api/board/seek"
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bodyBytes))
-	if err != nil {
-		errors.RequestError(err)
-	}
 
 	setHeaders(req, token)
 

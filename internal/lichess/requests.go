@@ -5,16 +5,17 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+
 	"github.com/proh14/lichess-tui/internal/errors"
 )
 
 const (
-	GET = "GET"
+	GET  = "GET"
 	POST = "POST"
 )
 
 func setHeaders(req *http.Request, token string) {
-	req.Header.Set("Authorization", "Bearer " + token)
+	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
 }
 
@@ -61,7 +62,7 @@ func SendMessage(config SendMessageConfig, token string) {
 		"text": config.text,
 	}
 	bodyBytes, _ := json.Marshal(body)
-	req := request(POST, "https://lichess.org/inbox/" + config.user, bytes.NewBuffer(bodyBytes))
+	req := request(POST, "https://lichess.org/inbox/"+config.user, bytes.NewBuffer(bodyBytes))
 
 	setHeaders(req, token)
 
@@ -75,27 +76,26 @@ func SendMessage(config SendMessageConfig, token string) {
 }
 
 type SeekGameConfig struct {
-	rated string // bool
-	time string // number
-	increment string // number
-	days string // number
-	variant string 
+	rated       string // bool
+	time        string // number
+	increment   string // number
+	days        string // number
+	variant     string
 	ratingRange string // example: 1500-1800
 }
 
 // Game operations
 func SeekGame(config SeekGameConfig, token string) {
 	body := map[string]string{
-		"rated": config.rated,
-		"time": config.time,
-		"increment": config.increment,
-		"days": config.days,
-		"variant": config.variant,
+		"rated":       config.rated,
+		"time":        config.time,
+		"increment":   config.increment,
+		"days":        config.days,
+		"variant":     config.variant,
 		"ratingRange": config.ratingRange,
 	}
 	bodyBytes, _ := json.Marshal(body)
 	req := request(POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
-
 
 	setHeaders(req, token)
 

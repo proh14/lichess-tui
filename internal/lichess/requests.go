@@ -4,19 +4,19 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"path"
 	"net/http"
-
 	"github.com/proh14/lichess-tui/internal/errors"
 )
 
 const (
-	GET  = "GET"
+	GET = "GET"
 	POST = "POST"
 )
 
 func setHeaders(req *http.Request, token string) {
-	req.Header.Set("Authorization", "Bearer "+token)
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer " + token)
+	req.Header.Set("Content-Type", "application/x-ndjson")
 }
 
 func request(method string, url string, body io.Reader) *http.Request {
@@ -52,17 +52,11 @@ func TokenExists(token string) bool {
 }
 
 // Messages
-type SendMessageConfig struct {
-	user string
-	text string
-}
-
-func SendMessage(config SendMessageConfig, token string) {
-	body := map[string]string{
-		"text": config.text,
-	}
+// user string
+// text string
+func SendMessage(body map[string]string, token string) {
 	bodyBytes, _ := json.Marshal(body)
-	req := request(POST, "https://lichess.org/inbox/"+config.user, bytes.NewBuffer(bodyBytes))
+	req := request(POST, path.Join("https://lichess.org/inbox", body["user"]), bytes.NewBuffer(bodyBytes))
 
 	setHeaders(req, token)
 
@@ -75,25 +69,14 @@ func SendMessage(config SendMessageConfig, token string) {
 	defer resp.Body.Close()
 }
 
-type SeekGameConfig struct {
-	rated       string // bool
-	time        string // number
-	increment   string // number
-	days        string // number
-	variant     string
-	ratingRange string // example: 1500-1800
-}
-
 // Game operations
-func SeekGame(config SeekGameConfig, token string) {
-	body := map[string]string{
-		"rated":       config.rated,
-		"time":        config.time,
-		"increment":   config.increment,
-		"days":        config.days,
-		"variant":     config.variant,
-		"ratingRange": config.ratingRange,
-	}
+// rated // bool
+// time // number
+// increment // number
+// days // number
+// variant 
+// ratingRange // example: 1500-1800
+func SeekGame(body map[string]string, token string) {
 	bodyBytes, _ := json.Marshal(body)
 	req := request(POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
 
@@ -107,3 +90,45 @@ func SeekGame(config SeekGameConfig, token string) {
 
 	defer resp.Body.Close()
 }
+
+type OngoingGames struct {
+	NowPlaying []struct {
+		GameID   string `json:"gameId"`
+		FullID   string `json:"fullId"`
+		Color    string `json:"color"`
+		Fen      string `json:"fen"`
+		HasMoved bool   `json:"hasMoved"`
+		IsMyTurn bool   `json:"isMyTurn"`
+		LastMove string `json:"lastMove"`
+		Opponent struct {
+			ID       string `json:"id"`
+			Rating   int    `json:"rating"`
+			Username string `json:"username"`
+		} `json:"opponent"`
+		Perf        string `json:"perf"`
+		Rated       bool   `json:"rated"`
+		SecondsLeft int    `json:"secondsLeft"`
+		Source      string `json:"source"`
+		Speed       string `json:"speed"`
+		Variant     struct {
+			Key  string `json:"key"`
+			Name string `json:"name"`
+		} `json:"variant"`
+	} `json:"nowPlaying"`
+}
+
+func GetOngoingGames(token string)  {
+	bodyBytes, _ := json.Marshal(body)
+	req := request(POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
+
+	setHeaders(req, token)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		errors.RequestError(err)
+	}
+
+	defer resp.Body.Close()
+}
+

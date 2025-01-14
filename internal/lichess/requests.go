@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"fmt"
 	"path"
 	"net/http"
 	"github.com/proh14/lichess-tui/internal/errors"
@@ -47,7 +48,7 @@ func TokenExists(token string) bool {
 
 	// An error is returned in case a token doesn't exist
 	_, containsKey := respMap["error"]
-
+GetOngoingGames(token)
 	return !containsKey
 }
 
@@ -117,9 +118,8 @@ type OngoingGames struct {
 	} `json:"nowPlaying"`
 }
 
-func GetOngoingGames(token string)  {
-	bodyBytes, _ := json.Marshal(body)
-	req := request(POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
+func GetOngoingGames(token string) OngoingGames {
+	req := request(GET, "https://lichess.org/api/account/playing", nil)
 
 	setHeaders(req, token)
 
@@ -128,7 +128,13 @@ func GetOngoingGames(token string)  {
 	if err != nil {
 		errors.RequestError(err)
 	}
-
 	defer resp.Body.Close()
+
+	respBody, _ := io.ReadAll(resp.Body)
+
+	respMap := OngoingGames{}
+	json.Unmarshal(respBody, &respMap)
+
+	return respMap
 }
 

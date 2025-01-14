@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"fmt"
 	"path"
 	"net/http"
 	"github.com/proh14/lichess-tui/internal/errors"

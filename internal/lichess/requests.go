@@ -4,18 +4,19 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"path"
 	"net/http"
+	"path"
+
 	"github.com/proh14/lichess-tui/internal/errors"
 )
 
 const (
-	GET = "GET"
+	GET  = "GET"
 	POST = "POST"
 )
 
 func setHeaders(req *http.Request, token string) {
-	req.Header.Set("Authorization", "Bearer " + token)
+	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/x-ndjson")
 }
 
@@ -47,7 +48,7 @@ func TokenExists(token string) bool {
 
 	// An error is returned in case a token doesn't exist
 	_, containsKey := respMap["error"]
-GetOngoingGames(token)
+	GetOngoingGames(token)
 	return !containsKey
 }
 
@@ -56,7 +57,11 @@ GetOngoingGames(token)
 // text string
 func SendMessage(body map[string]string, token string) {
 	bodyBytes, _ := json.Marshal(body)
-	req := request(POST, path.Join("https://lichess.org/inbox", body["user"]), bytes.NewBuffer(bodyBytes))
+	req := request(
+		POST,
+		path.Join("https://lichess.org/inbox", body["user"]),
+		bytes.NewBuffer(bodyBytes),
+	)
 
 	setHeaders(req, token)
 
@@ -74,7 +79,7 @@ func SendMessage(body map[string]string, token string) {
 // time // number
 // increment // number
 // days // number
-// variant 
+// variant
 // ratingRange // example: 1500-1800
 func SeekGame(body map[string]string, token string) {
 	bodyBytes, _ := json.Marshal(body)
@@ -136,4 +141,3 @@ func GetOngoingGames(token string) OngoingGames {
 
 	return respMap
 }
-

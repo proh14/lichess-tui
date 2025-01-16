@@ -36,7 +36,7 @@ func request(method string, url string, body io.Reader) *http.Request {
 type TokenInfo struct {
 	Scopes  *string `json:"scopes"`
 	UserID  *string `json:"userId"`
-	Expires *int64  `json:"expires"`
+	Expires *uint64  `json:"expires"`
 }
 
 func GetTokenInfo(token string) TokenInfo {

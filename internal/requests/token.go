@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+
 	"github.com/proh14/lichess-tui/internal/errors"
 )
 
 type TokenInfo struct {
 	Scopes  *string `json:"scopes"`
 	UserID  *string `json:"userId"`
-	Expires *uint64  `json:"expires"`
+	Expires *uint64 `json:"expires"`
 }
 
 func GetTokenInfo(token string) TokenInfo {
@@ -37,5 +38,5 @@ func GetTokenInfo(token string) TokenInfo {
 }
 
 func TokenExists(token string) bool {
-	return GetTokenInfo(token) != TokenInfo{ nil, nil, nil }
+	return GetTokenInfo(token) != TokenInfo{nil, nil, nil}
 }

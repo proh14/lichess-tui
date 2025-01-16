@@ -2,6 +2,7 @@ package lichess
 
 import (
 	"errors"
+
 	"github.com/proh14/lichess-tui/internal/requests"
 )
 

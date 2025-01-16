@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+
 	"github.com/proh14/lichess-tui/internal/errors"
 )
 

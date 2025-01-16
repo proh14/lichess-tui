@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+
 	"github.com/proh14/lichess-tui/internal/errors"
 )
 
@@ -42,12 +43,12 @@ type OngoingGames struct {
 		LastMove string `json:"lastMove"`
 		Opponent struct {
 			ID       string `json:"id"`
-			Rating   uint    `json:"rating"`
+			Rating   uint   `json:"rating"`
 			Username string `json:"username"`
 		} `json:"opponent"`
 		Perf        string `json:"perf"`
 		Rated       bool   `json:"rated"`
-		SecondsLeft uint    `json:"secondsLeft"`
+		SecondsLeft uint   `json:"secondsLeft"`
 		Source      string `json:"source"`
 		Speed       string `json:"speed"`
 		Variant     struct {
@@ -107,4 +108,3 @@ func GameOperation(gameId string, operation string, token string) {
 
 	fmt.Println(respMap)
 }
-

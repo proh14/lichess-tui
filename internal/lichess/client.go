@@ -2,6 +2,7 @@ package lichess
 
 import (
 	"errors"
+	"github.com/proh14/lichess-tui/internal/requests"
 )
 
 func ValidateToken(value string) error {
@@ -9,7 +10,7 @@ func ValidateToken(value string) error {
 		return errors.New("The token can't be empty.")
 	}
 
-	if TokenExists(value) {
+	if requests.TokenExists(value) {
 		return nil
 	}
 

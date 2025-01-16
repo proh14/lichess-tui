@@ -6,12 +6,12 @@ import (
 	"github.com/proh14/lichess-tui/internal/requests"
 )
 
-func ValidateToken(value string) error {
-	if len(value) == 0 {
+func ValidateToken(token string) error {
+	if len(token) == 0 {
 		return errors.New("The token can't be empty.")
 	}
 
-	if requests.TokenExists(value) {
+	if requests.TokenExists(token) {
 		return nil
 	}
 

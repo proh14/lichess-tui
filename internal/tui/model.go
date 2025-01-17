@@ -5,7 +5,9 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/proh14/lichess-tui/internal/requests"
 	"github.com/proh14/lichess-tui/internal/tui/quickgame"
+	"github.com/proh14/lichess-tui/internal/config"
 )
 
 type viewState uint
@@ -59,7 +61,10 @@ func (m *Model) View() string {
 
 	sb := strings.Builder{}
 
-	m.title = "Lichess TUI\n"
+	cfg := config.GetConfig()
+	data := requests.GetProfile(cfg.Token)
+
+	m.title = data.ID + "\n"
 	m.title += strings.Repeat("‾", m.width-1)
 	m.title += "\n"
 

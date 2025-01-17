@@ -6,6 +6,7 @@ require (
 	github.com/ProtonMail/gopenpgp/v3 v3.1.1
 	github.com/charmbracelet/bubbletea v1.2.4
 	github.com/charmbracelet/huh v0.6.0
+	github.com/charmbracelet/lipgloss v1.0.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -15,7 +16,6 @@ require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/catppuccin/go v0.2.0 // indirect
 	github.com/charmbracelet/bubbles v0.20.0 // indirect
-	github.com/charmbracelet/lipgloss v1.0.0 // indirect
 	github.com/charmbracelet/x/ansi v0.6.0 // indirect
 	github.com/charmbracelet/x/exp/strings v0.0.0-20250112114943-1775be7e67ae // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect

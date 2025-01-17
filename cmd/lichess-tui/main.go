@@ -10,7 +10,7 @@ func main() {
 	// Load the config, if it doesn't exist, create it
 	config.LoadConfig(config.GetConfigPath())
 
-	p := tea.NewProgram(tui.NewModel())
+	p := tea.NewProgram(tui.NewModel(), tea.WithAltScreen())
 
 	_, err := p.Run()
 	if err != nil {

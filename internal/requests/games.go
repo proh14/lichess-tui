@@ -72,7 +72,7 @@ func GetOngoingGames(token string) OngoingGames {
 
 	respBody, _ := io.ReadAll(resp.Body)
 
-	respMap := OngoingGames{}
+	var respMap OngoingGames
 	json.Unmarshal(respBody, &respMap)
 
 	return respMap
@@ -107,4 +107,26 @@ func GameOperation(gameId string, operation string, token string) {
 	json.Unmarshal(respBody, &respMap)
 
 	fmt.Println(respMap)
+}
+
+// offeringDraw // bool
+func Move(gameId string, move string, body map[string]string, token string) {
+	url, _ := url.JoinPath("https://lichess.org/api/board/game", gameId, "move", move)
+	bodyBytes, _ := json.Marshal(body)
+
+	req := request(
+		POST,
+		url,
+		bytes.NewBuffer(bodyBytes),
+	)
+
+	setHeaders(req, token, NDJSON_CONTENT_TYPE)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		errors.RequestError(err)
+	}
+
+	defer resp.Body.Close()
 }

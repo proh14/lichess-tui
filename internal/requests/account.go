@@ -12,102 +12,13 @@ type Profile struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
 	Perfs    struct {
-		Chess960 struct {
+		Chess960, Atomic, RacingKings, UltraBullet, Blitz, KingOfTheHill, Bullet, Correspondence, Horde, Puzzle, Classical, Rapid, Storm, Racer, Streak struct {
 			Games  uint `json:"games"`
 			Rating uint `json:"rating"`
 			Rd     uint `json:"rd"`
 			Prog   uint `json:"prog"`
 			Prov   bool `json:"prov"`
 		} `json:"chess960"`
-		Atomic struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"atomic"`
-		RacingKings struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"racingKings"`
-		UltraBullet struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"ultraBullet"`
-		Blitz struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"blitz"`
-		KingOfTheHill struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"kingOfTheHill"`
-		Bullet struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"bullet"`
-		Correspondence struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"correspondence"`
-		Horde struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"horde"`
-		Puzzle struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"puzzle"`
-		Classical struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"classical"`
-		Rapid struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"rapid"`
-		Storm struct {
-			Runs  uint `json:"runs"`
-			Score uint `json:"score"`
-		} `json:"storm"`
-		Racer struct {
-			Runs  uint `json:"runs"`
-			Score uint `json:"score"`
-		} `json:"racer"`
-		Streak struct {
-			Runs  uint `json:"runs"`
-			Score uint `json:"score"`
-		} `json:"streak"`
 	} `json:"perfs"`
 	Flair        string `json:"flair"`
 	CreatedAt    uint64 `json:"createdAt"`
@@ -179,7 +90,7 @@ func GetProfile(token string) Profile {
 
 	respBody, _ := io.ReadAll(resp.Body)
 
-	respMap := Profile{}
+	var respMap Profile
 	json.Unmarshal(respBody, &respMap)
 
 	return respMap

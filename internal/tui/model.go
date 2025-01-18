@@ -5,9 +5,9 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/proh14/lichess-tui/internal/config"
 	"github.com/proh14/lichess-tui/internal/requests"
 	"github.com/proh14/lichess-tui/internal/tui/quickgame"
-	"github.com/proh14/lichess-tui/internal/config"
 )
 
 type viewState uint
@@ -65,19 +65,25 @@ func (m *Model) View() string {
 	data := requests.GetProfile(cfg.Token)
 
 	m.title = data.ID + "\n"
-	m.title += strings.Repeat("‾", m.width-1)
+	m.title += strings.Repeat("─", m.width-1)
 	m.title += "\n"
+
+	m.status = "\n"
+	m.status += strings.Repeat("─", m.width-1)
+	m.status += "\nHello world :)"
 
 	sb.WriteString(m.title)
 
 	sb.WriteString(lipgloss.Place(
 		m.width,
-		m.height-2,
+		m.height-4,
 		lipgloss.Center,
 		lipgloss.Center,
 		m.quickGameModel.View(),
 	),
 	)
+
+	sb.WriteString(m.status)
 
 	return sb.String()
 }

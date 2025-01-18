@@ -21,6 +21,7 @@ type Model struct {
 	viewState      viewState
 	quickGameModel *quickgame.Model
 	title          string
+	profile        requests.Profile
 	status         string
 	loaded         bool
 	height         int
@@ -28,10 +29,14 @@ type Model struct {
 }
 
 func NewModel() *Model {
+	cfg := config.GetConfig()
+	profile := requests.GetProfile(cfg.Token)
+
 	return &Model{
 		viewState:      QuickGameView,
 		quickGameModel: quickgame.New(0, 0),
 		loaded:         false,
+		profile:        profile,
 	}
 }
 
@@ -63,10 +68,7 @@ func (m *Model) View() string {
 
 	sb := strings.Builder{}
 
-	cfg := config.GetConfig()
-	data := requests.GetProfile(cfg.Token)
-
-	m.title = data.ID + "\n"
+	m.title = m.profile.ID + "\n"
 	m.title += strings.Repeat("─", m.width-1)
 	m.title += "\n"
 

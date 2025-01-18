@@ -3,11 +3,11 @@ binary_name := lichess-tui
 build_dir := build
 
 .PHONY: build
-build: format
+build: tidy
 	go build -o $(build_dir)/$(binary_name) $(main_package)
 
 .PHONY: run
-run: format
+run: tidy
 	go run $(main_package)
 
 .PHONY: clean
@@ -25,5 +25,5 @@ format:
 	goimports -w .
 
 .PHONY: tidy
-tidy: format
+tidy:
 	go mod tidy

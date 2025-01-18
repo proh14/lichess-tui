@@ -23,7 +23,7 @@ type Model struct {
 	SquaresHeight int
 }
 
-func New(rows, cols, width, height int) *Model {
+func New(cols, rows, width, height int) *Model {
 	return &Model{
 		Cols:          cols,
 		Rows:          rows,

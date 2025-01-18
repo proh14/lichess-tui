@@ -11,9 +11,30 @@ type Model struct {
 }
 
 func New(height, width uint) *Model {
-	return &Model{
-		grid: grid.New(3, 3, 11, 4),
+	model := &Model{
+		grid: grid.New(3, 4, 13, 3),
 	}
+
+	timeFormats := [...]string{
+		"1+0",
+		"2+1",
+		"3+0",
+		"3+2",
+		"5+0",
+		"5+3",
+		"10+0",
+		"10+5",
+		"15+10",
+		"30+0",
+		"30+20",
+		"Custom.",
+	}
+
+	for i := 0; i < 12; i++ {
+		model.grid.Squares[i] = timeFormats[i]
+	}
+
+	return model
 }
 
 func (m *Model) Init() tea.Cmd {

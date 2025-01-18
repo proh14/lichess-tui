@@ -44,8 +44,15 @@ func (m *Model) Init() tea.Cmd {
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if msg.String() == "q" {
-			return m, tea.Quit
+		switch msg.String() {
+		case "left":
+			m.grid.Left()
+		case "right":
+			m.grid.Right()
+		case "up":
+			m.grid.Up()
+		case "down":
+			m.grid.Down()
 		}
 	}
 	return m, nil

@@ -62,3 +62,27 @@ func (g *Model) View() string {
 func (g *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return g, nil
 }
+
+func (g *Model) Left() {
+	if g.CurrentSquare > 0 {
+		g.CurrentSquare--
+	}
+}
+
+func (g *Model) Right() {
+	if g.CurrentSquare < len(g.Squares)-1 {
+		g.CurrentSquare++
+	}
+}
+
+func (g *Model) Up() {
+	if g.CurrentSquare-g.Cols >= 0 {
+		g.CurrentSquare -= g.Cols
+	}
+}
+
+func (g *Model) Down() {
+	if g.CurrentSquare+g.Cols < len(g.Squares) {
+		g.CurrentSquare += g.Cols
+	}
+}

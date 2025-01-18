@@ -51,6 +51,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
+	m.quickGameModel.Update(msg)
+
 	return m, nil
 }
 

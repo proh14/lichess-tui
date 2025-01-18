@@ -1,10 +1,30 @@
 package quickgame
 
 import (
-	"github.com/proh14/lichess-tui/internal/tui/grid"
+	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/proh14/lichess-tui/internal/tui/grid"
 )
+
+type timeFormat struct {
+	time      uint
+	increment uint
+}
+
+var timeFormats = [...]timeFormat{
+	{1, 0},
+	{2, 1},
+	{3, 0},
+	{3, 2},
+	{5, 0},
+	{5, 3},
+	{10, 0},
+	{10, 5},
+	{15, 10},
+	{30, 0},
+	{30, 20},
+}
 
 type Model struct {
 	grid *grid.Model
@@ -15,24 +35,14 @@ func New(height, width uint) *Model {
 		grid: grid.New(3, 4, 13, 3),
 	}
 
-	timeFormats := [...]string{
-		"1+0",
-		"2+1",
-		"3+0",
-		"3+2",
-		"5+0",
-		"5+3",
-		"10+0",
-		"10+5",
-		"15+10",
-		"30+0",
-		"30+20",
-		"Custom.",
+	for i := 0; i < len(timeFormats); i++ {
+		time := fmt.Sprintf("%d", timeFormats[i].time)
+		increment := fmt.Sprintf("%d", timeFormats[i].increment)
+
+		model.grid.Squares[i]  = time + "+" + increment
 	}
 
-	for i := 0; i < 12; i++ {
-		model.grid.Squares[i] = timeFormats[i]
-	}
+	model.grid.Squares[len(model.grid.Squares)-1] = "Custom"
 
 	return model
 }

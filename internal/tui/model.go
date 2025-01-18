@@ -54,6 +54,9 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.loaded = true
 	case message.StartGame:
 		m.status = "\nStarting game..."
+
+		cfg := config.GetConfig()
+		go requests.SeekGame(requests.SeekGameConfig{ Time: 10 }, cfg.Token)
 	case tea.KeyMsg:
 		if msg.String() == "q" {
 			return m, tea.Quit

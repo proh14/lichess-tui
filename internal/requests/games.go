@@ -11,13 +11,17 @@ import (
 	"github.com/proh14/lichess-tui/internal/errors"
 )
 
-// rated // bool
-// time // number
-// increment // number
-// days // number
-// variant
-// ratingRange // example: 1500-1800
-func SeekGame(body map[string]string, token string) {
+// https://lichess.org/api#tag/Board/operation/apiBoardSeek
+type SeekGameConfig struct {
+	Rated bool `json:"bool,omitempty"`
+	Time uint `json:"time"`
+	Increment uint `json:"increment,omitempty"`
+	Days uint `json:"days,omitempty"`
+	Variant string `json:"variant,omitempty"`
+	RatingRange string `json:"ratingRange,omitempty"`
+}
+
+func SeekGame(body SeekGameConfig, token string) {
 	bodyBytes, _ := json.Marshal(body)
 	req := request(POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
 
@@ -30,8 +34,13 @@ func SeekGame(body map[string]string, token string) {
 	}
 
 	defer resp.Body.Close()
+
+	respBody, _ := io.ReadAll(resp.Body)
+
+	fmt.Println(string(respBody))
 }
 
+// https://lichess.org/api#tag/Account/operation/accountMe
 type OngoingGames struct {
 	NowPlaying []struct {
 		GameID   string `json:"gameId"`
@@ -109,8 +118,12 @@ func GameOperation(gameId string, operation string, token string) {
 	fmt.Println(respMap)
 }
 
-// offeringDraw // bool
-func Move(gameId string, move string, body map[string]string, token string) {
+// https://lichess.org/api#tag/Board/operation/boardGameMove
+type MoveConfig struct {
+	OfferingDraw uint `json:"offeringDraw,omitempty"`
+}
+
+func Move(gameId string, move string, body MoveConfig, token string) {
 	url, _ := url.JoinPath("https://lichess.org/api/board/game", gameId, "move", move)
 	bodyBytes, _ := json.Marshal(body)
 

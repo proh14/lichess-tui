@@ -42,7 +42,7 @@ func (g *Model) View() string {
 	style := squareStyle.Width(g.SquaresWidth).Height(g.SquaresHeight)
 	focusedStyle := foucusedSquareStyle.Width(g.SquaresWidth).Height(g.SquaresHeight)
 
-	tempsquares := make([]string, len(g.Squares))
+	tempsquares := make([]string, g.Rows*g.Cols)
 	for square := range g.Squares {
 		if square == g.CurrentSquare {
 			tempsquares[square] = focusedStyle.Render(g.Squares[square])
@@ -60,6 +60,19 @@ func (g *Model) View() string {
 }
 
 func (g *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "up":
+			g.Up()
+		case "down":
+			g.Down()
+		case "left":
+			g.Left()
+		case "right":
+			g.Right()
+		}
+	}
 	return g, nil
 }
 
@@ -70,7 +83,7 @@ func (g *Model) Left() {
 }
 
 func (g *Model) Right() {
-	if g.CurrentSquare < len(g.Squares)-1 {
+	if g.CurrentSquare < g.Rows*g.Cols-1 {
 		g.CurrentSquare++
 	}
 }
@@ -82,7 +95,7 @@ func (g *Model) Up() {
 }
 
 func (g *Model) Down() {
-	if g.CurrentSquare+g.Cols < len(g.Squares) {
+	if g.CurrentSquare+g.Cols < g.Rows*g.Cols {
 		g.CurrentSquare += g.Cols
 	}
 }

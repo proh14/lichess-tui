@@ -42,19 +42,7 @@ func (m *Model) Init() tea.Cmd {
 }
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		switch msg.String() {
-		case "left":
-			m.grid.Left()
-		case "right":
-			m.grid.Right()
-		case "up":
-			m.grid.Up()
-		case "down":
-			m.grid.Down()
-		}
-	}
+	m.grid.Update(msg)
 	return m, nil
 }
 

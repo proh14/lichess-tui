@@ -27,6 +27,23 @@ var timeFormats = [...]timeFormat{
 	{30, 20},
 }
 
+func strToTf(timeFormat string) (time uint, increment uint) {
+	if timeFormat == "Custom" {
+		return 0, 0
+	}
+
+	for i := 0; i < len(timeFormats); i++ {
+		time := fmt.Sprintf("%d", timeFormats[i].time)
+		increment := fmt.Sprintf("%d", timeFormats[i].increment)
+
+		if time+"+"+increment == timeFormat {
+			return timeFormats[i].time, timeFormats[i].increment
+		}
+	}
+
+	return 0, 0
+}
+
 type Model struct {
 	grid *grid.Model
 }
@@ -58,7 +75,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "enter":
 			return m, func() tea.Msg {
-				return message.StartGame{Time: 15, Increment: 10}
+				time, increment := strToTf(m.grid.Squares[m.grid.CurrentSquare])
+				return message.StartGame{Time: time, Increment: increment}
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/proh14/lichess-tui/internal/config"
 	"github.com/proh14/lichess-tui/internal/requests"
+	"github.com/proh14/lichess-tui/internal/tui/message"
 	"github.com/proh14/lichess-tui/internal/tui/quickgame"
 )
 
@@ -37,6 +38,7 @@ func NewModel() *Model {
 		quickGameModel: quickgame.New(0, 0),
 		loaded:         false,
 		profile:        profile,
+		status:         "\nPress 'q' to quit",
 	}
 }
 
@@ -50,15 +52,17 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = msg.Width
 		m.height = msg.Height
 		m.loaded = true
+	case message.StartGame:
+		m.status = "\nStarting game..."
 	case tea.KeyMsg:
 		if msg.String() == "q" {
 			return m, tea.Quit
 		}
 	}
 
-	m.quickGameModel.Update(msg)
+	_, cmd := m.quickGameModel.Update(msg)
 
-	return m, nil
+	return m, cmd
 }
 
 func (m *Model) View() string {
@@ -71,10 +75,6 @@ func (m *Model) View() string {
 	m.title = m.profile.ID + "\n"
 	m.title += strings.Repeat("─", m.width-1)
 	m.title += "\n"
-
-	m.status = "\n"
-	m.status += strings.Repeat("─", m.width-1)
-	m.status += "\nHello world :)"
 
 	sb.WriteString(m.title)
 

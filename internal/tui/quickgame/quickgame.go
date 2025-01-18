@@ -5,6 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/proh14/lichess-tui/internal/tui/grid"
+	"github.com/proh14/lichess-tui/internal/tui/message"
 )
 
 type timeFormat struct {
@@ -39,7 +40,7 @@ func New(height, width uint) *Model {
 		time := fmt.Sprintf("%d", timeFormats[i].time)
 		increment := fmt.Sprintf("%d", timeFormats[i].increment)
 
-		model.grid.Squares[i]  = time + "+" + increment
+		model.grid.Squares[i] = time + "+" + increment
 	}
 
 	model.grid.Squares[len(model.grid.Squares)-1] = "Custom"
@@ -52,7 +53,18 @@ func (m *Model) Init() tea.Cmd {
 }
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "enter":
+			return m, func() tea.Msg {
+				return message.StartGame{Time: 15, Increment: 10}
+			}
+		}
+	}
+
 	m.grid.Update(msg)
+
 	return m, nil
 }
 

@@ -11,7 +11,9 @@ var (
 			AlignVertical(lipgloss.Center).
 			Align(lipgloss.Center)
 
-	foucusedSquareStyle = squareStyle.Foreground(lipgloss.Color("205"))
+	foucusedSquareStyle = squareStyle.Bold(true).
+				BorderForeground(lipgloss.Color("#00D8BD")).
+				Foreground(lipgloss.Color("#00D8BD"))
 )
 
 type Model struct {

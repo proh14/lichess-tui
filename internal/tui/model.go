@@ -5,10 +5,10 @@ import (
 	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/proh14/lichess-tui/internal/config"
-	"github.com/proh14/lichess-tui/internal/requests"
-	"github.com/proh14/lichess-tui/internal/tui/message"
-	"github.com/proh14/lichess-tui/internal/tui/quickgame"
+	"lichess-tui/internal/config"
+	"lichess-tui/internal/requests"
+	"lichess-tui/internal/tui/message"
+	"lichess-tui/internal/tui/quickgame"
 )
 
 type viewState uint

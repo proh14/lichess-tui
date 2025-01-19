@@ -3,7 +3,7 @@ package lichess
 import (
 	"errors"
 
-	"github.com/proh14/lichess-tui/internal/requests"
+	"lichess-tui/internal/requests"
 )
 
 func ValidateToken(token string) error {

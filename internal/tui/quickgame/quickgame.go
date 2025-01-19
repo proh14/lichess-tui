@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/proh14/lichess-tui/internal/tui/grid"
-	"github.com/proh14/lichess-tui/internal/tui/message"
+	"lichess-tui/internal/tui/grid"
+	"lichess-tui/internal/tui/message"
 )
 
 type timeFormat struct {

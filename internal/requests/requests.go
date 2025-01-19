@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/proh14/lichess-tui/internal/errors"
+	"lichess-tui/internal/errors"
 )
 
 const (

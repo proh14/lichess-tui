@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 
 	"github.com/charmbracelet/huh"
-	"github.com/proh14/lichess-tui/internal/lichess"
-	"github.com/proh14/lichess-tui/internal/security"
+	"lichess-tui/internal/lichess"
+	"lichess-tui/internal/security"
 	"gopkg.in/yaml.v2"
 )
 

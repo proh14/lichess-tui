@@ -2,8 +2,8 @@ package main
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/proh14/lichess-tui/internal/config"
-	"github.com/proh14/lichess-tui/internal/tui"
+	"lichess-tui/internal/config"
+	"lichess-tui/internal/tui"
 )
 
 func main() {

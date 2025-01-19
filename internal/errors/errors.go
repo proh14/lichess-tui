@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-const help = "Please make a new issue if you think this is a bug: https://github.com/proh14/lichess-tui/issues."
+const help = "Please make a new issue if you think this is a bug: https://lichess-tui/issues."
 
 func RequestError(err error) {
 	fmt.Println(help)

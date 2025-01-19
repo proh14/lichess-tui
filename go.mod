@@ -1,4 +1,4 @@
-module github.com/proh14/lichess-tui
+module lichess-tui
 
 go 1.23.4
 

@@ -13,8 +13,7 @@ import (
 
 // https://lichess.org/api#tag/Board/operation/apiBoardSeek
 type SeekGameResponse struct {
-	Id    string `json:"string,omitempty"`
-	Error string `json:"error,omitempty"`
+	Id    string `json:"id"`
 }
 
 // https://lichess.org/api#tag/Board/operation/apiBoardSeek

@@ -6,9 +6,45 @@ import (
 	"lichess-tui/internal/errors"
 )
 
-var IncomingEvents map[string]string
+type IncomingEvents struct {
+	Type string `json:"type"`
+	Game struct {
+		GameID   string `json:"gameId"`
+		FullID   string `json:"fullId"`
+		Color    string `json:"color"`
+		Fen      string `json:"fen"`
+		HasMoved bool   `json:"hasMoved"`
+		IsMyTurn bool   `json:"isMyTurn"`
+		LastMove string `json:"lastMove"`
+		Opponent struct {
+			ID       string `json:"id"`
+			Rating   int    `json:"rating"`
+			Username string `json:"username"`
+		} `json:"opponent"`
+		Perf        string `json:"perf"`
+		Rated       bool   `json:"rated"`
+		SecondsLeft int    `json:"secondsLeft"`
+		Source      string `json:"source"`
+		Status      struct {
+			ID   int    `json:"id"`
+			Name string `json:"name"`
+		} `json:"status"`
+		Speed   string `json:"speed"`
+		Variant struct {
+			Key  string `json:"key"`
+			Name string `json:"name"`
+		} `json:"variant"`
+		Compat struct {
+			Bot   bool `json:"bot"`
+			Board bool `json:"board"`
+		} `json:"compat"`
+		ID string `json:"id"`
+	} `json:"game"`
+}
 
-func StreamIncomingEvents(streamVar *map[string]string, token string) {
+var IncomingEventsData IncomingEvents
+
+func StreamIncomingEvents(token string) {
 	req := request(GET, "https://lichess.org/api/stream/event", nil)
 
 	setHeaders(req, token, NDJSON_CONTENT_TYPE)
@@ -23,7 +59,7 @@ func StreamIncomingEvents(streamVar *map[string]string, token string) {
 	dec := json.NewDecoder(resp.Body)
 	
 	for {
-		dec.Decode(&streamVar)
+		dec.Decode(&IncomingEventsData)
 	}
 }
 

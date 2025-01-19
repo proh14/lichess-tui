@@ -1,7 +1,6 @@
 package tui
 
 import (
-	"fmt"
 	"strings"
 
 	"lichess-tui/internal/config"
@@ -60,8 +59,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		respVar := requests.SeekGameResponse{}
 		cfg := config.GetConfig()
 		go requests.SeekGame(requests.SeekGameConfig{Time: 10}, cfg.Token, &respVar)
-
-		fmt.Println(respVar)
 	case tea.KeyMsg:
 		if msg.String() == "q" {
 			return m, tea.Quit

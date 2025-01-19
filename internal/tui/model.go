@@ -1,14 +1,16 @@
 package tui
 
 import (
-	"strings"
 	"fmt"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
+	"strings"
+
 	"lichess-tui/internal/config"
 	"lichess-tui/internal/requests"
 	"lichess-tui/internal/tui/message"
 	"lichess-tui/internal/tui/quickgame"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 type viewState uint
@@ -57,7 +59,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		respVar := requests.SeekGameResponse{}
 		cfg := config.GetConfig()
-		go requests.SeekGame(requests.SeekGameConfig{ Time: 10 }, cfg.Token, &respVar)
+		go requests.SeekGame(requests.SeekGameConfig{Time: 10}, cfg.Token, &respVar)
 
 		fmt.Println(respVar)
 	case tea.KeyMsg:

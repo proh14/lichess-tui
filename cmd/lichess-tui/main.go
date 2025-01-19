@@ -1,9 +1,10 @@
 package main
 
 import (
-	tea "github.com/charmbracelet/bubbletea"
 	"lichess-tui/internal/config"
 	"lichess-tui/internal/tui"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 func main() {

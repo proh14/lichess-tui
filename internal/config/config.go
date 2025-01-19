@@ -6,9 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/charmbracelet/huh"
 	"lichess-tui/internal/lichess"
 	"lichess-tui/internal/security"
+
+	"github.com/charmbracelet/huh"
 	"gopkg.in/yaml.v2"
 )
 

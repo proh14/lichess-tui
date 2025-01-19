@@ -13,17 +13,17 @@ import (
 
 // https://lichess.org/api#tag/Board/operation/apiBoardSeek
 type SeekGameResponse struct {
-	Id string `json:"string,omitempty"`
+	Id    string `json:"string,omitempty"`
 	Error string `json:"error,omitempty"`
 }
 
 // https://lichess.org/api#tag/Board/operation/apiBoardSeek
 type SeekGameConfig struct {
-	Rated bool `json:"bool,omitempty"`
-	Time uint `json:"time"`
-	Increment uint `json:"increment,omitempty"`
-	Days uint `json:"days,omitempty"`
-	Variant string `json:"variant,omitempty"`
+	Rated       bool   `json:"bool,omitempty"`
+	Time        uint   `json:"time"`
+	Increment   uint   `json:"increment,omitempty"`
+	Days        uint   `json:"days,omitempty"`
+	Variant     string `json:"variant,omitempty"`
 	RatingRange string `json:"ratingRange,omitempty"`
 }
 

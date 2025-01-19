@@ -3,9 +3,10 @@ package quickgame
 import (
 	"fmt"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"lichess-tui/internal/tui/grid"
 	"lichess-tui/internal/tui/message"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 type timeFormat struct {

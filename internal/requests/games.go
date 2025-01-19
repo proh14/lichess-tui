@@ -12,6 +12,12 @@ import (
 )
 
 // https://lichess.org/api#tag/Board/operation/apiBoardSeek
+type SeekGameResponse struct {
+	Id string `json:"string,omitempty"`
+	Error string `json:"error,omitempty"`
+}
+
+// https://lichess.org/api#tag/Board/operation/apiBoardSeek
 type SeekGameConfig struct {
 	Rated bool `json:"bool,omitempty"`
 	Time uint `json:"time"`
@@ -21,7 +27,7 @@ type SeekGameConfig struct {
 	RatingRange string `json:"ratingRange,omitempty"`
 }
 
-func SeekGame(body SeekGameConfig, token string) {
+func SeekGame(body SeekGameConfig, token string, respVar *SeekGameResponse) {
 	bodyBytes, _ := json.Marshal(body)
 	req := request(POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
 
@@ -37,7 +43,10 @@ func SeekGame(body SeekGameConfig, token string) {
 
 	respBody, _ := io.ReadAll(resp.Body)
 
-	fmt.Println(string(respBody))
+	var respStruct SeekGameResponse
+	json.Unmarshal(respBody, &respStruct)
+
+	*respVar = respStruct
 }
 
 // https://lichess.org/api#tag/Account/operation/accountMe
@@ -67,7 +76,7 @@ type OngoingGames struct {
 	} `json:"nowPlaying"`
 }
 
-func GetOngoingGames(token string) OngoingGames {
+func GetOngoingGames(token string, respVar *OngoingGames) {
 	req := request(GET, "https://lichess.org/api/account/playing", nil)
 
 	setHeaders(req, token, NDJSON_CONTENT_TYPE)
@@ -81,10 +90,10 @@ func GetOngoingGames(token string) OngoingGames {
 
 	respBody, _ := io.ReadAll(resp.Body)
 
-	var respMap OngoingGames
-	json.Unmarshal(respBody, &respMap)
+	var respStruct OngoingGames
+	json.Unmarshal(respBody, &respStruct)
 
-	return respMap
+	*respVar = respStruct
 }
 
 const (

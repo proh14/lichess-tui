@@ -12,26 +12,20 @@ import (
 )
 
 // https://lichess.org/api#tag/Board/operation/apiBoardSeek
-type SeekGameResponse struct {
-	ID string `json:"id"`
-	Error string `json:"error"`
-}
-
-// https://lichess.org/api#tag/Board/operation/apiBoardSeek
 type SeekGameConfig struct {
 	Rated       bool   `json:"bool,omitempty"`
 	Time        uint   `json:"time"`
-	Increment   uint   `json:"increment,omitempty"`
+	Increment   uint   `json:"increment"`
 	Days        uint   `json:"days,omitempty"`
 	Variant     string `json:"variant,omitempty"`
 	RatingRange string `json:"ratingRange,omitempty"`
 }
 
-func SeekGame(body SeekGameConfig, token string, respVar *SeekGameResponse) {
+func SeekGame(body SeekGameConfig, token string) {
 	bodyBytes, _ := json.Marshal(body)
 	req := request(POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
 
-	setHeaders(req, token, NDJSON_CONTENT_TYPE)
+	setHeaders(req, token, JSON_CONTENT_TYPE)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -40,12 +34,6 @@ func SeekGame(body SeekGameConfig, token string, respVar *SeekGameResponse) {
 	}
 
 	defer resp.Body.Close()
-
-	dec := json.NewDecoder(resp.Body)
-	
-	for dec.More() {
-		dec.Decode(&respVar)
-	}
 }
 
 // https://lichess.org/api#tag/Account/operation/accountMe

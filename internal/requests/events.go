@@ -3,6 +3,7 @@ package requests
 import (
 	"encoding/json"
 	"net/http"
+	"fmt"
 	"lichess-tui/internal/errors"
 )
 
@@ -58,8 +59,9 @@ func StreamIncomingEvents(token string) {
 
 	dec := json.NewDecoder(resp.Body)
 	
-	for {
+	for dec.More() {
 		dec.Decode(&IncomingEventsData)
+		fmt.Println(IncomingEventsData)
 	}
 }
 

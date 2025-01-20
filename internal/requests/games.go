@@ -13,7 +13,8 @@ import (
 
 // https://lichess.org/api#tag/Board/operation/apiBoardSeek
 type SeekGameResponse struct {
-	Id    string `json:"id"`
+	ID string `json:"id"`
+	Error string `json:"error"`
 }
 
 // https://lichess.org/api#tag/Board/operation/apiBoardSeek
@@ -40,12 +41,11 @@ func SeekGame(body SeekGameConfig, token string, respVar *SeekGameResponse) {
 
 	defer resp.Body.Close()
 
-	respBody, _ := io.ReadAll(resp.Body)
-
-	var respStruct SeekGameResponse
-	json.Unmarshal(respBody, &respStruct)
-
-	*respVar = respStruct
+	dec := json.NewDecoder(resp.Body)
+	
+	for dec.More() {
+		dec.Decode(&respVar)
+	}
 }
 
 // https://lichess.org/api#tag/Account/operation/accountMe

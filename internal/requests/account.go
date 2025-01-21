@@ -38,8 +38,8 @@ type Profile struct {
 		Links      string `json:"links"`
 	} `json:"profile"`
 	SeenAt   uint64 `json:"seenAt"`
-	Patron   bool  `json:"patron"`
-	Verified bool  `json:"verified"`
+	Patron   bool   `json:"patron"`
+	Verified bool   `json:"verified"`
 	PlayTime struct {
 		Total uint `json:"total"`
 		Tv    uint `json:"tv"`

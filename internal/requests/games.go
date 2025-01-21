@@ -152,19 +152,19 @@ type BoardState struct {
 	Perf  struct {
 		Name string `json:"name,omitempty"`
 	} `json:"perf,omitempty"`
-	Rated     bool  `json:"rated,omitempty"`
+	Rated     bool   `json:"rated,omitempty"`
 	CreatedAt uint64 `json:"createdAt,omitempty"`
 	White     struct {
 		ID     string `json:"id,omitempty"`
 		Name   string `json:"name,omitempty"`
 		Title  string `json:"title,omitempty"`
-		Rating uint    `json:"rating,omitempty"`
+		Rating uint   `json:"rating,omitempty"`
 	} `json:"white,omitempty"`
 	Black struct {
 		ID          string `json:"id,omitempty"`
 		Name        string `json:"name,omitempty"`
 		Title       string `json:"title,omitempty"`
-		Rating      uint    `json:"rating,omitempty"`
+		Rating      uint   `json:"rating,omitempty"`
 		Provisional bool   `json:"provisional,omitempty"`
 	} `json:"black,omitempty"`
 	InitialFen string `json:"initialFen,omitempty"`
@@ -176,17 +176,17 @@ type BoardState struct {
 	State struct {
 		Type   string `json:"type,omitempty"`
 		Moves  string `json:"moves,omitempty"`
-		Wtime  uint    `json:"wtime,omitempty"`
-		Btime  uint    `json:"btime,omitempty"`
-		Winc   uint    `json:"winc,omitempty"`
-		Binc   uint    `json:"binc,omitempty"`
+		Wtime  uint   `json:"wtime,omitempty"`
+		Btime  uint   `json:"btime,omitempty"`
+		Winc   uint   `json:"winc,omitempty"`
+		Binc   uint   `json:"binc,omitempty"`
 		Status string `json:"status,omitempty"`
 	} `json:"state,omitempty"`
 	Moves             string `json:"moves,omitempty"`
-	Wtime             uint    `json:"wtime,omitempty"`
-	Btime             uint    `json:"btime,omitempty"`
-	Winc              uint    `json:"winc,omitempty"`
-	Binc              uint    `json:"binc,omitempty"`
+	Wtime             uint   `json:"wtime,omitempty"`
+	Btime             uint   `json:"btime,omitempty"`
+	Winc              uint   `json:"winc,omitempty"`
+	Binc              uint   `json:"binc,omitempty"`
 	Wdraw             bool   `json:"wdraw,omitempty"`
 	Bdraw             bool   `json:"bdraw,omitempty"`
 	Status            string `json:"status,omitempty"`
@@ -194,7 +194,7 @@ type BoardState struct {
 	Text              string `json:"text,omitempty"`
 	Room              string `json:"room,omitempty"`
 	Gone              bool   `json:"gone,omitempty"`
-	ClaimWinInSeconds uint    `json:"claimWinInSeconds,omitempty"`
+	ClaimWinInSeconds uint   `json:"claimWinInSeconds,omitempty"`
 }
 
 var BoardStateData BoardState
@@ -213,7 +213,7 @@ func StreamBoardState(gameId string, token string) {
 	defer resp.Body.Close()
 
 	dec := json.NewDecoder(resp.Body)
-	
+
 	for dec.More() {
 		dec.Decode(&BoardStateData)
 	}

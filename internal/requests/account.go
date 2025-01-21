@@ -36,7 +36,7 @@ type Profile struct {
 		DsbRating  uint   `json:"dsbRating"`
 		Links      string `json:"links"`
 	} `json:"profile"`
-	SeenAt   int64 `json:"seenAt"`
+	SeenAt   uint64 `json:"seenAt"`
 	Patron   bool  `json:"patron"`
 	Verified bool  `json:"verified"`
 	PlayTime struct {

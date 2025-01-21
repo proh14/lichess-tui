@@ -3,7 +3,6 @@ package requests
 import (
 	"encoding/json"
 	"net/http"
-	"fmt"
 	"lichess-tui/internal/errors"
 )
 
@@ -20,15 +19,15 @@ type IncomingEvents struct {
 		Opponent struct {
 			ID         string `json:"id,omitempty"`
 			Username   string `json:"username,omitempty"`
-			Rating     int    `json:"rating,omitempty"`
-			RatingDiff int    `json:"ratingDiff,omitempty"`
+			Rating     uint    `json:"rating,omitempty"`
+			RatingDiff uint    `json:"ratingDiff,omitempty"`
 		} `json:"opponent,omitempty"`
 		Perf        string `json:"perf,omitempty"`
 		Rated       bool   `json:"rated,omitempty"`
-		SecondsLeft int    `json:"secondsLeft,omitempty"`
+		SecondsLeft uint    `json:"secondsLeft,omitempty"`
 		Source      string `json:"source,omitempty"`
 		Status      struct {
-			ID   int    `json:"id,omitempty"`
+			ID   uint    `json:"id,omitempty"`
 			Name string `json:"name,omitempty"`
 		} `json:"status,omitempty"`
 		Speed   string `json:"speed,omitempty"`
@@ -41,7 +40,7 @@ type IncomingEvents struct {
 			Board bool `json:"board,omitempty"`
 		} `json:"compat,omitempty"`
 		Winner     string `json:"winner,omitempty"`
-		RatingDiff int    `json:"ratingDiff,omitempty"`
+		RatingDiff uint    `json:"ratingDiff,omitempty"`
 		ID         string `json:"id,omitempty"`
 	} `json:"game,omitempty"`
 	Challenge struct {
@@ -51,17 +50,17 @@ type IncomingEvents struct {
 		Challenger struct {
 			ID     string `json:"id,omitempty"`
 			Name   string `json:"name,omitempty"`
-			Rating int    `json:"rating,omitempty"`
+			Rating uint    `json:"rating,omitempty"`
 			Online bool   `json:"online,omitempty"`
-			Lag    int    `json:"lag,omitempty"`
+			Lag    uint    `json:"lag,omitempty"`
 		} `json:"challenger,omitempty"`
 		DestUser struct {
 			ID     string `json:"id,omitempty"`
 			Name   string `json:"name,omitempty"`
-			Rating int    `json:"rating,omitempty"`
+			Rating uint    `json:"rating,omitempty"`
 			Title  string `json:"title,omitempty"`
 			Online bool   `json:"online,omitempty"`
-			Lag    int    `json:"lag,omitempty"`
+			Lag    uint    `json:"lag,omitempty"`
 		} `json:"destUser,omitempty"`
 		Variant struct {
 			Key   string `json:"key,omitempty"`
@@ -72,8 +71,8 @@ type IncomingEvents struct {
 		Speed       string `json:"speed,omitempty"`
 		TimeControl struct {
 			Type      string `json:"type,omitempty"`
-			Limit     int    `json:"limit,omitempty"`
-			Increment int    `json:"increment,omitempty"`
+			Limit     uint    `json:"limit,omitempty"`
+			Increment uint    `json:"increment,omitempty"`
 			Show      string `json:"show,omitempty"`
 		} `json:"timeControl,omitempty"`
 		Color      string `json:"color,omitempty"`
@@ -105,7 +104,5 @@ func StreamIncomingEvents(token string) {
 	
 	for dec.More() {
 		dec.Decode(&IncomingEventsData)
-		fmt.Println(IncomingEventsData)
 	}
 }
-

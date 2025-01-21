@@ -8,39 +8,83 @@ import (
 )
 
 type IncomingEvents struct {
-	Type string `json:"type"`
+	Type string `json:"type,omitempty"`
 	Game struct {
-		GameID   string `json:"gameId"`
-		FullID   string `json:"fullId"`
-		Color    string `json:"color"`
-		Fen      string `json:"fen"`
-		HasMoved bool   `json:"hasMoved"`
-		IsMyTurn bool   `json:"isMyTurn"`
-		LastMove string `json:"lastMove"`
+		GameID   string `json:"gameId,omitempty"`
+		FullID   string `json:"fullId,omitempty"`
+		Color    string `json:"color,omitempty"`
+		Fen      string `json:"fen,omitempty"`
+		HasMoved bool   `json:"hasMoved,omitempty"`
+		IsMyTurn bool   `json:"isMyTurn,omitempty"`
+		LastMove string `json:"lastMove,omitempty"`
 		Opponent struct {
-			ID       string `json:"id"`
-			Rating   int    `json:"rating"`
-			Username string `json:"username"`
-		} `json:"opponent"`
-		Perf        string `json:"perf"`
-		Rated       bool   `json:"rated"`
-		SecondsLeft int    `json:"secondsLeft"`
-		Source      string `json:"source"`
+			ID         string `json:"id,omitempty"`
+			Username   string `json:"username,omitempty"`
+			Rating     int    `json:"rating,omitempty"`
+			RatingDiff int    `json:"ratingDiff,omitempty"`
+		} `json:"opponent,omitempty"`
+		Perf        string `json:"perf,omitempty"`
+		Rated       bool   `json:"rated,omitempty"`
+		SecondsLeft int    `json:"secondsLeft,omitempty"`
+		Source      string `json:"source,omitempty"`
 		Status      struct {
-			ID   int    `json:"id"`
-			Name string `json:"name"`
-		} `json:"status"`
-		Speed   string `json:"speed"`
+			ID   int    `json:"id,omitempty"`
+			Name string `json:"name,omitempty"`
+		} `json:"status,omitempty"`
+		Speed   string `json:"speed,omitempty"`
 		Variant struct {
-			Key  string `json:"key"`
-			Name string `json:"name"`
-		} `json:"variant"`
+			Key  string `json:"key,omitempty"`
+			Name string `json:"name,omitempty"`
+		} `json:"variant,omitempty"`
 		Compat struct {
-			Bot   bool `json:"bot"`
-			Board bool `json:"board"`
-		} `json:"compat"`
-		ID string `json:"id"`
-	} `json:"game"`
+			Bot   bool `json:"bot,omitempty"`
+			Board bool `json:"board,omitempty"`
+		} `json:"compat,omitempty"`
+		Winner     string `json:"winner,omitempty"`
+		RatingDiff int    `json:"ratingDiff,omitempty"`
+		ID         string `json:"id,omitempty"`
+	} `json:"game,omitempty"`
+	Challenge struct {
+		ID         string `json:"id,omitempty"`
+		URL        string `json:"url,omitempty"`
+		Status     string `json:"status,omitempty"`
+		Challenger struct {
+			ID     string `json:"id,omitempty"`
+			Name   string `json:"name,omitempty"`
+			Rating int    `json:"rating,omitempty"`
+			Online bool   `json:"online,omitempty"`
+			Lag    int    `json:"lag,omitempty"`
+		} `json:"challenger,omitempty"`
+		DestUser struct {
+			ID     string `json:"id,omitempty"`
+			Name   string `json:"name,omitempty"`
+			Rating int    `json:"rating,omitempty"`
+			Title  string `json:"title,omitempty"`
+			Online bool   `json:"online,omitempty"`
+			Lag    int    `json:"lag,omitempty"`
+		} `json:"destUser,omitempty"`
+		Variant struct {
+			Key   string `json:"key,omitempty"`
+			Name  string `json:"name,omitempty"`
+			Short string `json:"short,omitempty"`
+		} `json:"variant,omitempty"`
+		Rated       bool   `json:"rated,omitempty"`
+		Speed       string `json:"speed,omitempty"`
+		TimeControl struct {
+			Type      string `json:"type,omitempty"`
+			Limit     int    `json:"limit,omitempty"`
+			Increment int    `json:"increment,omitempty"`
+			Show      string `json:"show,omitempty"`
+		} `json:"timeControl,omitempty"`
+		Color      string `json:"color,omitempty"`
+		FinalColor string `json:"finalColor,omitempty"`
+		Perf       struct {
+			Icon string `json:"icon,omitempty"`
+			Name string `json:"name,omitempty"`
+		} `json:"perf,omitempty"`
+		DeclineReason    string `json:"declineReason,omitempty"`
+		DeclineReasonKey string `json:"declineReasonKey,omitempty"`
+	} `json:"challenge,omitempty"`
 }
 
 var IncomingEventsData IncomingEvents

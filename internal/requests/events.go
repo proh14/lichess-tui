@@ -6,6 +6,7 @@ import (
 	"lichess-tui/internal/errors"
 )
 
+// https://lichess.org/api/stream/event
 type IncomingEvents struct {
 	Type string `json:"type,omitempty"`
 	Game struct {

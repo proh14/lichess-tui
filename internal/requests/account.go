@@ -8,6 +8,7 @@ import (
 	"lichess-tui/internal/errors"
 )
 
+// https://lichess.org/api#tag/Account/operation/accountMe
 type Profile struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`

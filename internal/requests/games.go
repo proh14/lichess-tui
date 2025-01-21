@@ -140,6 +140,7 @@ func Move(gameId string, move string, body MoveConfig, token string) {
 	defer resp.Body.Close()
 }
 
+// https://lichess.org/api#tag/Board/operation/boardGameStream
 type BoardState struct {
 	ID      string `json:"id,omitempty"`
 	Variant struct {
@@ -217,4 +218,3 @@ func StreamBoardState(gameId string, token string) {
 		dec.Decode(&BoardStateData)
 	}
 }
-

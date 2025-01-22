@@ -11,7 +11,7 @@ import (
 
 // https://lichess.org/api#tag/Messaging/operation/inboxUsername
 type SendMessageConfig struct {
-	Text string `json:"text,omitempty"`
+	Text string `json:"text"`
 }
 
 func SendMessage(user string, body SendMessageConfig, token string) {

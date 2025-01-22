@@ -10,71 +10,160 @@ import (
 
 // https://lichess.org/api#tag/Account/operation/accountMe
 type Profile struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
+	ID       string `json:"id,omitempty"`
+	Username string `json:"username,omitempty"`
 	Perfs    struct {
-		Chess960, Atomic, RacingKings, UltraBullet, Blitz, KingOfTheHill, Bullet, Correspondence, Horde, Puzzle, Classical, Rapid, Storm, Racer, Streak struct {
-			Games  uint `json:"games"`
-			Rating uint `json:"rating"`
-			Rd     uint `json:"rd"`
-			Prog   uint `json:"prog"`
-			Prov   bool `json:"prov"`
-		} `json:"chess960"`
-	} `json:"perfs"`
-	Flair        string `json:"flair"`
-	CreatedAt    uint64 `json:"createdAt"`
-	Disabled     bool   `json:"disabled"`
-	TosViolation bool   `json:"tosViolation"`
+		Chess960 struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"chess960,omitempty"`
+		Atomic struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"atomic,omitempty"`
+		RacingKings struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"racingKings,omitempty"`
+		UltraBullet struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"ultraBullet,omitempty"`
+		Blitz struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"blitz,omitempty"`
+		KingOfTheHill struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"kingOfTheHill,omitempty"`
+		Bullet struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"bullet,omitempty"`
+		Correspondence struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"correspondence,omitempty"`
+		Horde struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"horde,omitempty"`
+		Puzzle struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"puzzle,omitempty"`
+		Classical struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"classical,omitempty"`
+		Rapid struct {
+			Games  uint  `json:"games,omitempty"`
+			Rating uint  `json:"rating,omitempty"`
+			Rd     uint  `json:"rd,omitempty"`
+			Prog   uint  `json:"prog,omitempty"`
+			Prov   bool `json:"prov,omitempty"`
+		} `json:"rapid,omitempty"`
+		Storm struct {
+			Runs  uint `json:"runs,omitempty"`
+			Score uint `json:"score,omitempty"`
+		} `json:"storm,omitempty"`
+		Racer struct {
+			Runs  uint `json:"runs,omitempty"`
+			Score uint `json:"score,omitempty"`
+		} `json:"racer,omitempty"`
+		Streak struct {
+			Runs  uint `json:"runs,omitempty"`
+			Score uint `json:"score,omitempty"`
+		} `json:"streak,omitempty"`
+	} `json:"perfs,omitempty"`
+	Flair        string `json:"flair,omitempty"`
+	CreatedAt    uint64  `json:"createdAt,omitempty"`
+	Disabled     bool   `json:"disabled,omitempty"`
+	TosViolation bool   `json:"tosViolation,omitempty"`
 	Profile      struct {
-		Flag       string `json:"flag"`
-		Location   string `json:"location"`
-		Bio        string `json:"bio"`
-		RealName   string `json:"realName"`
-		FideRating uint   `json:"fideRating"`
-		UscfRating uint   `json:"uscfRating"`
-		EcfRating  uint   `json:"ecfRating"`
-		CfcRating  uint   `json:"cfcRating"`
-		DsbRating  uint   `json:"dsbRating"`
-		Links      string `json:"links"`
-	} `json:"profile"`
-	SeenAt   uint64 `json:"seenAt"`
-	Patron   bool   `json:"patron"`
-	Verified bool   `json:"verified"`
+		Flag       string `json:"flag,omitempty"`
+		Location   string `json:"location,omitempty"`
+		Bio        string `json:"bio,omitempty"`
+		RealName   string `json:"realName,omitempty"`
+		FideRating uint    `json:"fideRating,omitempty"`
+		UscfRating uint    `json:"uscfRating,omitempty"`
+		EcfRating  uint    `json:"ecfRating,omitempty"`
+		CfcRating  uint    `json:"cfcRating,omitempty"`
+		DsbRating  uint    `json:"dsbRating,omitempty"`
+		Links      string `json:"links,omitempty"`
+	} `json:"profile,omitempty"`
+	SeenAt   uint64 `json:"seenAt,omitempty"`
+	Patron   bool  `json:"patron,omitempty"`
+	Verified bool  `json:"verified,omitempty"`
 	PlayTime struct {
-		Total uint `json:"total"`
-		Tv    uint `json:"tv"`
-	} `json:"playTime"`
-	Title   string `json:"title"`
-	URL     string `json:"url"`
-	Playing string `json:"playing"`
+		Total uint `json:"total,omitempty"`
+		Tv    uint `json:"tv,omitempty"`
+	} `json:"playTime,omitempty"`
+	Title   string `json:"title,omitempty"`
+	URL     string `json:"url,omitempty"`
+	Playing string `json:"playing,omitempty"`
 	Count   struct {
-		All      uint `json:"all"`
-		Rated    uint `json:"rated"`
-		Ai       uint `json:"ai"`
-		Draw     uint `json:"draw"`
-		DrawH    uint `json:"drawH"`
-		Loss     uint `json:"loss"`
-		LossH    uint `json:"lossH"`
-		Win      uint `json:"win"`
-		WinH     uint `json:"winH"`
-		Bookmark uint `json:"bookmark"`
-		Playing  uint `json:"playing"`
-		Import   uint `json:"import"`
-		Me       uint `json:"me"`
-	} `json:"count"`
-	Streaming bool `json:"streaming"`
+		All      uint `json:"all,omitempty"`
+		Rated    uint `json:"rated,omitempty"`
+		Ai       uint `json:"ai,omitempty"`
+		Draw     uint `json:"draw,omitempty"`
+		DrawH    uint `json:"drawH,omitempty"`
+		Loss     uint `json:"loss,omitempty"`
+		LossH    uint `json:"lossH,omitempty"`
+		Win      uint `json:"win,omitempty"`
+		WinH     uint `json:"winH,omitempty"`
+		Bookmark uint `json:"bookmark,omitempty"`
+		Playing  uint `json:"playing,omitempty"`
+		Import   uint `json:"import,omitempty"`
+		Me       uint `json:"me,omitempty"`
+	} `json:"count,omitempty"`
+	Streaming bool `json:"streaming,omitempty"`
 	Streamer  struct {
 		Twitch struct {
-			Channel string `json:"channel"`
-		} `json:"twitch"`
+			Channel string `json:"channel,omitempty"`
+		} `json:"twitch,omitempty"`
 		YouTube struct {
-			Channel string `json:"channel"`
-		} `json:"youTube"`
-	} `json:"streamer"`
-	Followable bool `json:"followable"`
-	Following  bool `json:"following"`
-	Blocking   bool `json:"blocking"`
-	FollowsYou bool `json:"followsYou"`
+			Channel string `json:"channel,omitempty"`
+		} `json:"youTube,omitempty"`
+	} `json:"streamer,omitempty"`
+	Followable bool `json:"followable,omitempty"`
+	Following  bool `json:"following,omitempty"`
+	Blocking   bool `json:"blocking,omitempty"`
+	FollowsYou bool `json:"followsYou,omitempty"`
 }
 
 func GetProfile(token string) Profile {

@@ -27,7 +27,7 @@ func SendMessage(user string, body SendMessageConfig, token string) {
 		errors.RequestError(err)
 	}
 
-	setHeaders(req, token, NDJSON_CONTENT_TYPE)
+	setHeaders(req, token, JSON_CONTENT_TYPE)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

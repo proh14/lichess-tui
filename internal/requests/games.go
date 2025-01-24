@@ -76,7 +76,7 @@ func GetOngoingGames(token string, respVar *OngoingGames) {
 		errors.RequestError(err)
 	}
 
-	setHeaders(req, token, NDJSON_CONTENT_TYPE)
+	setHeaders(req, token, JSON_CONTENT_TYPE)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -110,7 +110,7 @@ func GameOperation(gameId string, operation string, token string) {
 		errors.RequestError(err)
 	}
 
-	setHeaders(req, token, NDJSON_CONTENT_TYPE)
+	setHeaders(req, token, JSON_CONTENT_TYPE)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -145,7 +145,7 @@ func Move(gameId string, move string, body MoveConfig, token string) {
 		errors.RequestError(err)
 	}
 
-	setHeaders(req, token, NDJSON_CONTENT_TYPE)
+	setHeaders(req, token, JSON_CONTENT_TYPE)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

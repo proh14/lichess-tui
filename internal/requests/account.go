@@ -174,7 +174,7 @@ func GetProfile(token string) Profile {
 		errors.RequestError(err)
 	}
 
-	setHeaders(req, token, NDJSON_CONTENT_TYPE)
+	setHeaders(req, token, JSON_CONTENT_TYPE)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -186,6 +186,35 @@ func GetProfile(token string) Profile {
 	respBody, _ := io.ReadAll(resp.Body)
 
 	var respMap Profile
+	json.Unmarshal(respBody, &respMap)
+
+	return respMap
+}
+
+type EmailAddress struct {
+	Email string `json:"email"`
+}
+
+func GetEmailAddress(token string) EmailAddress {
+	req, err := http.NewRequest(
+		GET, "https://lichess.org/api/account/email", nil,
+	)
+	if err != nil {
+		errors.RequestError(err)
+	}
+
+	setHeaders(req, token, JSON_CONTENT_TYPE)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		errors.RequestError(err)
+	}
+	defer resp.Body.Close()
+
+	respBody, _ := io.ReadAll(resp.Body)
+
+	var respMap EmailAddress
 	json.Unmarshal(respBody, &respMap)
 
 	return respMap

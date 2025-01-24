@@ -102,7 +102,7 @@ func StreamIncomingEvents(token string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		errors.RequestError(err)
+    errors.HandleRequestResponse(req, resp, err)
 	}
 	defer resp.Body.Close()
 

@@ -179,7 +179,7 @@ func GetProfile(token string) Profile {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		errors.RequestError(err)
+    errors.HandleRequestResponse(req, resp, err)
 	}
 	defer resp.Body.Close()
 
@@ -208,7 +208,7 @@ func GetEmailAddress(token string) EmailAddress {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		errors.RequestError(err)
+    errors.HandleRequestResponse(req, resp, err)
 	}
 	defer resp.Body.Close()
 

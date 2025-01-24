@@ -35,7 +35,7 @@ func SeekGame(body SeekGameConfig, token string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-    errors.HandleRequestResponse(req, resp, err)
+		errors.HandleRequestResponse(req, resp, err)
 	}
 
 	defer resp.Body.Close()
@@ -81,7 +81,7 @@ func GetOngoingGames(token string, respVar *OngoingGames) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-    errors.HandleRequestResponse(req, resp, err)
+		errors.HandleRequestResponse(req, resp, err)
 	}
 	defer resp.Body.Close()
 
@@ -115,7 +115,7 @@ func GameOperation(gameId string, operation string, token string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-    errors.HandleRequestResponse(req, resp, err)
+		errors.HandleRequestResponse(req, resp, err)
 	}
 
 	defer resp.Body.Close()
@@ -150,7 +150,7 @@ func Move(gameId string, move string, body MoveConfig, token string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-    errors.HandleRequestResponse(req, resp, err)
+		errors.HandleRequestResponse(req, resp, err)
 	}
 
 	defer resp.Body.Close()
@@ -228,7 +228,7 @@ func StreamBoardState(gameId string, token string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-    errors.HandleRequestResponse(req, resp, err)
+		errors.HandleRequestResponse(req, resp, err)
 	}
 	defer resp.Body.Close()
 
@@ -296,7 +296,7 @@ func StreamGameMoves(gameId string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-    errors.HandleRequestResponse(req, resp, err)
+		errors.HandleRequestResponse(req, resp, err)
 	}
 	defer resp.Body.Close()
 

@@ -30,7 +30,7 @@ func ToggleFollowUser(user string, follow bool, token string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-    errors.HandleRequestResponse(req, resp, err)
+		errors.HandleRequestResponse(req, resp, err)
 	}
 	defer resp.Body.Close()
 }
@@ -58,7 +58,7 @@ func ToggleBlockUser(user string, block bool, token string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-    errors.HandleRequestResponse(req, resp, err)
+		errors.HandleRequestResponse(req, resp, err)
 	}
 	defer resp.Body.Close()
 }

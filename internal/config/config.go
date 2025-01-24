@@ -34,7 +34,9 @@ func setupConfig(path string) {
 		Description("Token").
 		Placeholder("lip_").
 		EchoMode(huh.EchoModePassword).
-		Validate(lichess.ValidateToken).
+		Validate(func(value string) error {
+			return lichess.ValidateToken(value, GetConfigPath())
+		}).
 		Value(&token)
 
 	tokenFileField := huh.NewInput().
@@ -134,7 +136,7 @@ func LoadConfig(path string) error {
 
 	loadToken()
 
-	err = lichess.ValidateToken(cfg.Token)
+	err = lichess.ValidateToken(cfg.Token, GetConfigPath())
 	if err != nil {
 		log.Fatalf("Invalid token: %v", err)
 	}

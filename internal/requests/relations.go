@@ -8,7 +8,7 @@ import (
 )
 
 // https://lichess.org/api#tag/Relations/operation/followUser
-func ToggleFollowPlayer(user string, follow bool, token string) {
+func ToggleFollowUser(user string, follow bool, token string) {
 	var followString string
 
 	if follow {
@@ -36,7 +36,7 @@ func ToggleFollowPlayer(user string, follow bool, token string) {
 }
 
 // https://lichess.org/api#tag/Relations/operation/blockUser
-func ToggleBlockPlayer(user string, block bool, token string) {
+func ToggleBlockUser(user string, block bool, token string) {
 	var blockString string
 
 	if block {

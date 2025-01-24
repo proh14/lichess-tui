@@ -91,7 +91,11 @@ type IncomingEvents struct {
 var IncomingEventsData IncomingEvents
 
 func StreamIncomingEvents(token string) {
-	req := request(GET, "https://lichess.org/api/stream/event", nil)
+	req, err := http.NewRequest(
+		GET, "https://lichess.org/api/stream/event", nil)
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	setHeaders(req, token, NDJSON_CONTENT_TYPE)
 

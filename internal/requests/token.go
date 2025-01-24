@@ -18,11 +18,14 @@ type TokenInfo struct {
 }
 
 func GetTokenInfo(token string) TokenInfo {
-	req := request(
+	req, err := http.NewRequest(
 		POST,
 		"https://lichess.org/api/token/test",
 		bytes.NewBuffer([]byte(token)),
 	)
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

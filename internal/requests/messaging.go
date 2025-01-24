@@ -16,13 +16,16 @@ type SendMessageConfig struct {
 
 func SendMessage(user string, body SendMessageConfig, token string) {
 	url, _ := url.JoinPath("https://lichess.org/inbox", user)
-
 	bodyBytes, _ := json.Marshal(body)
-	req := request(
+
+	req, err := http.NewRequest(
 		POST,
 		url,
 		bytes.NewBuffer(bodyBytes),
 	)
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	setHeaders(req, token, NDJSON_CONTENT_TYPE)
 

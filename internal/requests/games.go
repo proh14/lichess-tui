@@ -23,7 +23,12 @@ type SeekGameConfig struct {
 
 func SeekGame(body SeekGameConfig, token string) {
 	bodyBytes, _ := json.Marshal(body)
-	req := request(POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
+
+	req, err := http.NewRequest(
+		POST, "https://lichess.org/api/board/seek", bytes.NewBuffer(bodyBytes))
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	setHeaders(req, token, JSON_CONTENT_TYPE)
 
@@ -48,12 +53,12 @@ type OngoingGames struct {
 		LastMove string `json:"lastMove,omitempty"`
 		Opponent struct {
 			ID       string `json:"id,omitempty"`
-			Rating   uint    `json:"rating,omitempty"`
+			Rating   uint   `json:"rating,omitempty"`
 			Username string `json:"username,omitempty"`
 		} `json:"opponent,omitempty"`
 		Perf        string `json:"perf,omitempty"`
 		Rated       bool   `json:"rated,omitempty"`
-		SecondsLeft uint    `json:"secondsLeft,omitempty"`
+		SecondsLeft uint   `json:"secondsLeft,omitempty"`
 		Source      string `json:"source,omitempty"`
 		Speed       string `json:"speed,omitempty"`
 		Variant     struct {
@@ -64,7 +69,12 @@ type OngoingGames struct {
 }
 
 func GetOngoingGames(token string, respVar *OngoingGames) {
-	req := request(GET, "https://lichess.org/api/account/playing", nil)
+	req, err := http.NewRequest(
+		GET, "https://lichess.org/api/account/playing", nil,
+	)
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	setHeaders(req, token, NDJSON_CONTENT_TYPE)
 
@@ -91,11 +101,14 @@ const (
 func GameOperation(gameId string, operation string, token string) {
 	url, _ := url.JoinPath("https://lichess.org/api/board/game", gameId, operation)
 
-	req := request(
+	req, err := http.NewRequest(
 		POST,
 		url,
 		nil,
 	)
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	setHeaders(req, token, NDJSON_CONTENT_TYPE)
 
@@ -123,11 +136,14 @@ func Move(gameId string, move string, body MoveConfig, token string) {
 	url, _ := url.JoinPath("https://lichess.org/api/board/game", gameId, "move", move)
 	bodyBytes, _ := json.Marshal(body)
 
-	req := request(
+	req, err := http.NewRequest(
 		POST,
 		url,
 		bytes.NewBuffer(bodyBytes),
 	)
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	setHeaders(req, token, NDJSON_CONTENT_TYPE)
 
@@ -201,7 +217,11 @@ var BoardStateData BoardState
 
 func StreamBoardState(gameId string, token string) {
 	url, _ := url.JoinPath("https://lichess.org/api/board/game/stream", gameId)
-	req := request(GET, url, nil)
+
+	req, err := http.NewRequest(GET, url, nil)
+	if err != nil {
+		errors.RequestError(err)
+	}
 
 	setHeaders(req, token, NDJSON_CONTENT_TYPE)
 
@@ -216,5 +236,73 @@ func StreamBoardState(gameId string, token string) {
 
 	for dec.More() {
 		dec.Decode(&BoardStateData)
+	}
+}
+
+type GameMoves []struct {
+	ID      string `json:"id,omitempty"`
+	Variant struct {
+		Key   string `json:"key,omitempty"`
+		Name  string `json:"name,omitempty"`
+		Short string `json:"short,omitempty"`
+	} `json:"variant,omitempty"`
+	Speed         string `json:"speed,omitempty"`
+	Perf          string `json:"perf,omitempty"`
+	Rated         bool   `json:"rated,omitempty"`
+	InitialFen    string `json:"initialFen,omitempty"`
+	Fen           string `json:"fen,omitempty"`
+	Player        string `json:"player,omitempty"`
+	Turns         uint   `json:"turns,omitempty"`
+	StartedAtTurn uint   `json:"startedAtTurn,omitempty"`
+	Source        string `json:"source,omitempty"`
+	Status        struct {
+		ID   uint   `json:"id,omitempty"`
+		Name string `json:"name,omitempty"`
+	} `json:"status,omitempty"`
+	CreatedAt uint64 `json:"createdAt,omitempty"`
+	LastMove  string `json:"lastMove,omitempty"`
+	Players   struct {
+		White struct {
+			User struct {
+				Name  string `json:"name,omitempty"`
+				Title string `json:"title,omitempty"`
+				ID    string `json:"id,omitempty"`
+			} `json:"user,omitempty"`
+			Rating uint `json:"rating,omitempty"`
+		} `json:"white,omitempty"`
+		Black struct {
+			User struct {
+				Name string `json:"name,omitempty"`
+				ID   string `json:"id,omitempty"`
+			} `json:"user,omitempty"`
+			Rating uint `json:"rating,omitempty"`
+		} `json:"black,omitempty"`
+	} `json:"players,omitempty"`
+	Wc uint   `json:"wc,omitempty"`
+	Bc uint   `json:"bc,omitempty"`
+	Lm string `json:"lm,omitempty"`
+}
+
+var GameMovesData GameMoves
+
+func StreamGameMoves(gameId string) {
+	url, _ := url.JoinPath("https://lichess.org/api/stream/game", gameId)
+
+	req, err := http.NewRequest(GET, url, nil)
+	if err != nil {
+		errors.RequestError(err)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		errors.RequestError(err)
+	}
+	defer resp.Body.Close()
+
+	dec := json.NewDecoder(resp.Body)
+
+	for dec.More() {
+		dec.Decode(&GameMovesData)
 	}
 }

@@ -11,12 +11,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type timeFormat struct {
-	time      uint
-	increment uint
-}
-
-var timeFormats = [...]timeFormat{
+var timeFormats = [...]message.StartGame{
 	{1, 0},
 	{2, 1},
 	{3, 0},
@@ -30,21 +25,21 @@ var timeFormats = [...]timeFormat{
 	{30, 20},
 }
 
-func strToTf(timeFormat string) (time uint, increment uint) {
+func strToTf(timeFormat string) message.StartGame {
 	if timeFormat == "Custom" {
-		return 0, 0
+		return message.StartGame{0, 0}
 	}
 
 	for i := 0; i < len(timeFormats); i++ {
-		time := fmt.Sprintf("%d", timeFormats[i].time)
-		increment := fmt.Sprintf("%d", timeFormats[i].increment)
+		time := fmt.Sprintf("%d", timeFormats[i].Time)
+		increment := fmt.Sprintf("%d", timeFormats[i].Increment)
 
 		if time+"+"+increment == timeFormat {
-			return timeFormats[i].time, timeFormats[i].increment
+			return message.StartGame{timeFormats[i].Time, timeFormats[i].Increment}
 		}
 	}
 
-	return 0, 0
+	return message.StartGame{0, 0}
 }
 
 type Model struct {
@@ -60,8 +55,8 @@ func New(height, width uint) *Model {
 	}
 
 	for i := 0; i < len(timeFormats); i++ {
-		time := fmt.Sprintf("%d", timeFormats[i].time)
-		increment := fmt.Sprintf("%d", timeFormats[i].increment)
+		time := fmt.Sprintf("%d", timeFormats[i].Time)
+		increment := fmt.Sprintf("%d", timeFormats[i].Increment)
 
 		model.grid.Squares[i] = time + "+" + increment
 	}
@@ -81,8 +76,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "enter":
 			return m, func() tea.Msg {
-				time, increment := strToTf(m.grid.Squares[m.grid.CurrentSquare])
-				return message.StartGame{Time: time, Increment: increment}
+				timeFormat := strToTf(m.grid.Squares[m.grid.CurrentSquare])
+				return timeFormat
 			}
 		}
 	}

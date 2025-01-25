@@ -2,6 +2,7 @@ package lichess
 
 import (
 	"errors"
+	"os"
 
 	"lichess-tui/internal/requests"
 )
@@ -15,7 +16,14 @@ func ValidateToken(token string, configPath string) error {
 		return nil
 	}
 
+	message := "The given token is invalid. "
+
+	_, err := os.Stat(configPath)
+	if !os.IsNotExist(err) {
+		message += "Please try to remove " + configPath + " and log in again."
+	}
+
 	return errors.New(
-		"The given token is invalid. " + "Please try to remove " + configPath + " and log in again.",
+		message,
 	)
 }

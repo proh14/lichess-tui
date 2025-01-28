@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"lichess-tui/internal/errors"
 	"net/http"
-	"fmt"
 )
 
 // https://lichess.org/api/stream/event
@@ -110,6 +109,5 @@ func StreamIncomingEvents(token string) {
 
 	for dec.More() {
 		dec.Decode(&IncomingEventsData)
-		fmt.Println(IncomingEventsData)
 	}
 }

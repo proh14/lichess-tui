@@ -26,11 +26,7 @@ var viewStyle = lipgloss.NewStyle().
 
 func New(time, increment uint) *Model {
 	cfg := config.GetConfig()
-	go func() {
-		for {
-			requests.StreamIncomingEvents(cfg.Token)
-		}
-	}()
+	go requests.StreamIncomingEvents(cfg.Token)
 
 	return &Model{
 		time:      time,
@@ -43,7 +39,8 @@ func (m *Model) Init() tea.Cmd {
 }
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	if requests.IncomingEventsData.Game.ID == "" {
+	fmt.Println(requests.IncomingEventsData)
+	if requests.IncomingEventsData.Type != "gameStart" {
 		return m, nil
 	}
 

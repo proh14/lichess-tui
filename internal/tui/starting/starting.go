@@ -1,31 +1,61 @@
 package starting
 
 import (
-	"github.com/charmbracelet/bubbles/timer"
+	"fmt"
+	"lichess-tui/internal/config"
+	"lichess-tui/internal/requests"
+	"lichess-tui/internal/tui/message"
+
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 type Model struct {
 	time      uint
 	increment uint
-	timer     timer.Model
+}
+
+var viewStyle = lipgloss.NewStyle().
+	Border(lipgloss.RoundedBorder()).
+	BorderForeground(lipgloss.Color("#00D8BD")).
+	Width(40).
+	Height(10).
+	Bold(true).
+	Align(lipgloss.Center).
+	AlignVertical(lipgloss.Center)
+
+func New(time, increment uint) *Model {
+	cfg := config.GetConfig()
+	go func() {
+		for {
+			requests.StreamIncomingEvents(cfg.Token)
+		}
+	}()
+
+	return &Model{
+		time:      time,
+		increment: increment,
+	}
 }
 
 func (m *Model) Init() tea.Cmd {
-	return m.timer.Init()
+	return nil
 }
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
-	case timer.TickMsg:
-		var cmd tea.Cmd
-		m.timer, cmd = m.timer.Update(msg)
-		return m, cmd
+	if requests.IncomingEventsData.Game.ID == "" {
+		return m, nil
 	}
 
-	return m, nil
+	return m, func() tea.Msg {
+		return message.LoadBoard{
+			Time:      m.time,
+			Increment: m.increment,
+		}
+	}
 }
 
 func (m *Model) View() string {
-	return
+	str := fmt.Sprintf("Matchmaking...\n[%d+%d]", m.time, m.increment)
+	return viewStyle.Render(str)
 }

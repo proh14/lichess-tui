@@ -2,9 +2,8 @@ package requests
 
 import (
 	"encoding/json"
-	"net/http"
-
 	"lichess-tui/internal/errors"
+	"net/http"
 )
 
 // https://lichess.org/api/stream/event

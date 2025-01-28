@@ -2,9 +2,6 @@ package quickgame
 
 import (
 	"fmt"
-
-	"lichess-tui/internal/config"
-	"lichess-tui/internal/requests"
 	"lichess-tui/internal/tui/grid"
 	"lichess-tui/internal/tui/message"
 
@@ -47,9 +44,6 @@ type Model struct {
 }
 
 func New(height, width uint) *Model {
-	cfg := config.GetConfig()
-	go requests.StreamIncomingEvents(cfg.Token)
-
 	model := &Model{
 		grid: grid.New(3, 4, 13, 3),
 	}

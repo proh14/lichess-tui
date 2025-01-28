@@ -1,12 +1,12 @@
 package tui
 
 import (
-	"strings"
-
 	"lichess-tui/internal/config"
 	"lichess-tui/internal/requests"
 	"lichess-tui/internal/tui/message"
 	"lichess-tui/internal/tui/quickgame"
+	"lichess-tui/internal/tui/starting"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -16,18 +16,20 @@ type viewState uint
 
 const (
 	QuickGameView = iota
+	StartingGameView
 	GameView
 )
 
 type Model struct {
-	viewState      viewState
-	quickGameModel *quickgame.Model
-	title          string
-	profile        requests.Profile
-	status         string
-	loaded         bool
-	height         int
-	width          int
+	viewState         viewState
+	quickGameModel    *quickgame.Model
+	startingGameModel *starting.Model
+	title             string
+	profile           requests.Profile
+	status            string
+	loaded            bool
+	height            int
+	width             int
 }
 
 func NewModel() *Model {
@@ -54,16 +56,25 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height
 		m.loaded = true
 	case message.StartGame:
-		cfg := config.GetConfig()
-		go requests.SeekGame(requests.SeekGameConfig{Time: 10, Increment: 0}, cfg.Token)
-		m.status = "\nStarting the game..."
+		m.viewState = StartingGameView
+		m.startingGameModel = starting.New(msg.Time, msg.Increment)
+	case message.LoadBoard:
+		m.viewState = QuickGameView
+		m.status = "Match Found!!!!!! OMGOMGOMG STAMMAMAMMA STAMMAMMAMAM"
 	case tea.KeyMsg:
 		if msg.String() == "q" {
 			return m, tea.Quit
 		}
 	}
 
-	_, cmd := m.quickGameModel.Update(msg)
+	var cmd tea.Cmd
+
+	switch m.viewState {
+	case QuickGameView:
+		_, cmd = m.quickGameModel.Update(msg)
+	case StartingGameView:
+		_, cmd = m.startingGameModel.Update(msg)
+	}
 
 	return m, cmd
 }
@@ -81,14 +92,26 @@ func (m *Model) View() string {
 
 	sb.WriteString(m.title)
 
-	sb.WriteString(lipgloss.Place(
-		m.width,
-		m.height-4,
-		lipgloss.Center,
-		lipgloss.Center,
-		m.quickGameModel.View(),
-	),
-	)
+	switch m.viewState {
+	case QuickGameView:
+		sb.WriteString(lipgloss.Place(
+			m.width,
+			m.height-4,
+			lipgloss.Center,
+			lipgloss.Center,
+			m.quickGameModel.View(),
+		),
+		)
+	case StartingGameView:
+		sb.WriteString(lipgloss.Place(
+			m.width,
+			m.height-4,
+			lipgloss.Center,
+			lipgloss.Center,
+			m.startingGameModel.View(),
+		),
+		)
+	}
 
 	sb.WriteString(m.status)
 

@@ -3,7 +3,10 @@ package requests
 import (
 	"encoding/json"
 	"lichess-tui/internal/errors"
+	"lichess-tui/internal/tui/message"
 	"net/http"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 // https://lichess.org/api/stream/event
@@ -89,7 +92,7 @@ type IncomingEvents struct {
 
 var IncomingEventsData IncomingEvents
 
-func StreamIncomingEvents(token string) {
+func StreamIncomingEvents(token string, p *tea.Program) {
 	req, err := http.NewRequest(
 		GET, "https://lichess.org/api/stream/event", nil)
 	if err != nil {
@@ -109,5 +112,11 @@ func StreamIncomingEvents(token string) {
 
 	for dec.More() {
 		dec.Decode(&IncomingEventsData)
+		switch IncomingEventsData.Type {
+		case "gameStart":
+			// this?
+			msg := message.LoadBoard{Time: 69, Increment: 69}
+			p.Send(msg)
+		}
 	}
 }

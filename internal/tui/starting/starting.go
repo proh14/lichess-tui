@@ -2,9 +2,6 @@ package starting
 
 import (
 	"fmt"
-	"lichess-tui/internal/config"
-	"lichess-tui/internal/requests"
-	"lichess-tui/internal/tui/message"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -25,9 +22,6 @@ var viewStyle = lipgloss.NewStyle().
 	AlignVertical(lipgloss.Center)
 
 func New(time, increment uint) *Model {
-	cfg := config.GetConfig()
-	go requests.StreamIncomingEvents(cfg.Token)
-
 	return &Model{
 		time:      time,
 		increment: increment,
@@ -39,17 +33,7 @@ func (m *Model) Init() tea.Cmd {
 }
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	fmt.Println(requests.IncomingEventsData)
-	if requests.IncomingEventsData.Type != "gameStart" {
-		return m, nil
-	}
-
-	return m, func() tea.Msg {
-		return message.LoadBoard{
-			Time:      m.time,
-			Increment: m.increment,
-		}
-	}
+	return m, nil
 }
 
 func (m *Model) View() string {

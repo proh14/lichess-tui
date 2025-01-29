@@ -37,8 +37,6 @@ func SeekGame(body SeekGameConfig, token string) {
 	if err != nil {
 		errors.HandleRequestResponse(req, resp, err)
 	}
-
-	defer resp.Body.Close()
 }
 
 // https://lichess.org/api#tag/Games/operation/apiAccountPlaying

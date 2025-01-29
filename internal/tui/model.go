@@ -56,6 +56,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height
 		m.loaded = true
 	case message.StartGame:
+		cfg := config.GetConfig()
+		go requests.SeekGame(requests.SeekGameConfig{ Time: msg.Time, Increment: msg.Increment  }, cfg.Token)
 		m.viewState = StartingGameView
 		m.startingGameModel = starting.New(msg.Time, msg.Increment)
 	case message.LoadBoard:

@@ -8,16 +8,16 @@ import (
 )
 
 func IncomingEventListener(p *tea.Program) {
-	lastIncomingEventsData := requests.IncomingEvents{}
+	// lastIncomingEventsData := requests.IncomingEvents{}
 	for {
-		if requests.IncomingEventsData == lastIncomingEventsData {
-			continue
-		}
+		// if requests.IncomingEventsData == lastIncomingEventsData {
+		// 	continue
+		// }
 		switch requests.IncomingEventsData.Type {
 		case "gameStart":
 			msg := message.LoadBoard{Time: 69, Increment: 69}
 			p.Send(msg)
-			lastIncomingEventsData = requests.IncomingEventsData
+			// lastIncomingEventsData = requests.IncomingEventsData
 		}
 	}
 }

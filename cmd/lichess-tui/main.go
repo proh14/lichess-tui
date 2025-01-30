@@ -2,6 +2,7 @@ package main
 
 import (
 	"lichess-tui/internal/config"
+	"lichess-tui/internal/eventListener"
 	"lichess-tui/internal/requests"
 	"lichess-tui/internal/tui"
 
@@ -15,7 +16,10 @@ func main() {
 	p := tea.NewProgram(tui.NewModel())
 
 	cfg := config.GetConfig()
-	go requests.StreamIncomingEvents(cfg.Token, p)
+	
+	requests.IncomingEventsData = requests.IncomingEvents{}
+	go requests.StreamIncomingEvents(cfg.Token)
+	go eventListener.IncomingEventListener(p)
 
 	_, err := p.Run()
 	if err != nil {

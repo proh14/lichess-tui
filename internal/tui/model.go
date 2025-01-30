@@ -1,12 +1,13 @@
 package tui
 
 import (
+	"strings"
+
 	"lichess-tui/internal/config"
 	"lichess-tui/internal/requests"
 	"lichess-tui/internal/tui/message"
 	"lichess-tui/internal/tui/quickgame"
 	"lichess-tui/internal/tui/starting"
-	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -57,7 +58,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.loaded = true
 	case message.StartGame:
 		cfg := config.GetConfig()
-		go requests.SeekGame(requests.SeekGameConfig{ Time: msg.Time, Increment: msg.Increment  }, cfg.Token)
+		go requests.SeekGame(requests.SeekGameConfig{Time: msg.Time, Increment: msg.Increment}, cfg.Token)
 		m.viewState = StartingGameView
 		m.startingGameModel = starting.New(msg.Time, msg.Increment)
 	case message.LoadBoard:

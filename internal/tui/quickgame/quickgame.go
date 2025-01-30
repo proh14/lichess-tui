@@ -2,6 +2,7 @@ package quickgame
 
 import (
 	"fmt"
+
 	"lichess-tui/internal/tui/grid"
 	"lichess-tui/internal/tui/message"
 

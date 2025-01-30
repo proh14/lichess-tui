@@ -16,7 +16,7 @@ func main() {
 	p := tea.NewProgram(tui.NewModel())
 
 	cfg := config.GetConfig()
-	
+
 	requests.IncomingEventsData = requests.IncomingEvents{}
 	go requests.StreamIncomingEvents(cfg.Token)
 	go eventListener.IncomingEventListener(p)

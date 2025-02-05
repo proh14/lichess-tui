@@ -8,9 +8,11 @@ import (
 )
 
 func IncomingEventListener(p *tea.Program) {
+	changed := false
 	lastIncomingEventsData := requests.IncomingEvents{}
+	
 	for {
-		if requests.IncomingEventsData == lastIncomingEventsData {
+		if changed && requests.IncomingEventsData == lastIncomingEventsData {
 			continue
 		}
 		switch requests.IncomingEventsData.Type {
@@ -18,6 +20,7 @@ func IncomingEventListener(p *tea.Program) {
 			msg := message.LoadBoard{Time: 69, Increment: 69}
 			p.Send(msg)
 			lastIncomingEventsData = requests.IncomingEventsData
+			changed = true
 		}
 	}
 }

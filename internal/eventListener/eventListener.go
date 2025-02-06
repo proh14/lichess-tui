@@ -15,12 +15,12 @@ func IncomingEventListener(p *tea.Program) {
 		if changed && requests.IncomingEventsData == lastIncomingEventsData {
 			continue
 		}
-		switch requests.IncomingEventsData.Type {
-		case "gameStart":
+		switch {
+		case requests.IncomingEventsData.Type == "gameStart" && requests.IncomingEventsData.Game.GameID != "":
 			msg := message.LoadBoard{
 				Time:      69,
 				Increment: 69,
-				GameID:    requests.IncomingEventsData.Game.GameID,
+				Data:      requests.IncomingEventsData,
 			}
 			p.Send(msg)
 			lastIncomingEventsData = requests.IncomingEventsData

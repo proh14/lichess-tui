@@ -1,16 +1,14 @@
 package board
 
 import (
-	"fmt"
+	"lichess-tui/internal/tui/message"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
 type Model struct {
-	time      uint
-	increment uint
-	gameID    string
+	msg message.LoadBoard
 }
 
 var viewStyle = lipgloss.NewStyle().
@@ -22,11 +20,9 @@ var viewStyle = lipgloss.NewStyle().
 	Align(lipgloss.Center).
 	AlignVertical(lipgloss.Center)
 
-func New(time, increment uint, gameID string) *Model {
+func New(msg message.LoadBoard) *Model {
 	return &Model{
-		time:      time,
-		increment: increment,
-		gameID:    gameID,
+		msg: msg,
 	}
 }
 
@@ -39,6 +35,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *Model) View() string {
-	str := fmt.Sprintf(m.gameID)
+	str := m.msg.Data.Game.GameID + " " + m.msg.Data.Game.Opponent.Username
 	return viewStyle.Render(str)
 }

@@ -65,7 +65,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.startingGameModel = starting.New(msg.Time, msg.Increment)
 	case message.LoadBoard:
 		m.viewState = BoardView
-		m.boardModel = board.New(msg.Time, msg.Increment, msg.GameID)
+		m.boardModel = board.New(msg)
 	case tea.KeyMsg:
 		if msg.String() == "q" {
 			return m, tea.Quit

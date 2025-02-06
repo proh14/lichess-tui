@@ -16,7 +16,7 @@ func IncomingEventListener(p *tea.Program) {
 			continue
 		}
 		switch {
-		case requests.IncomingEventsData.Type == "gameStart" && requests.IncomingEventsData.Game.GameID != "":
+		case requests.IncomingEventsData.Type == "gameStart" && requests.IncomingEventsData.Game.Fen != "" && requests.IncomingEventsData.Game.GameID != "":
 			msg := message.LoadBoard{
 				Time:      69,
 				Increment: 69,

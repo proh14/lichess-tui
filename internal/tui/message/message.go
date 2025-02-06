@@ -8,4 +8,5 @@ type StartGame struct {
 type LoadBoard struct {
 	Time      uint
 	Increment uint
+	GameID    string
 }

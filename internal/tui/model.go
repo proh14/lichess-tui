@@ -5,6 +5,7 @@ import (
 
 	"lichess-tui/internal/config"
 	"lichess-tui/internal/requests"
+	"lichess-tui/internal/tui/board"
 	"lichess-tui/internal/tui/message"
 	"lichess-tui/internal/tui/quickgame"
 	"lichess-tui/internal/tui/starting"
@@ -18,13 +19,14 @@ type viewState uint
 const (
 	QuickGameView = iota
 	StartingGameView
-	GameView
+	BoardView
 )
 
 type Model struct {
 	viewState         viewState
 	quickGameModel    *quickgame.Model
 	startingGameModel *starting.Model
+	boardModel        *board.Model
 	title             string
 	profile           requests.Profile
 	status            string
@@ -62,8 +64,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.viewState = StartingGameView
 		m.startingGameModel = starting.New(msg.Time, msg.Increment)
 	case message.LoadBoard:
-		m.viewState = QuickGameView
-		m.status = "Match Found!!!!!! OMGOMGOMG STAMMAMAMMA STAMMAMMAMAM"
+		m.viewState = BoardView
+		m.boardModel = board.New(msg.Time, msg.Increment, msg.GameID)
 	case tea.KeyMsg:
 		if msg.String() == "q" {
 			return m, tea.Quit
@@ -77,6 +79,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		_, cmd = m.quickGameModel.Update(msg)
 	case StartingGameView:
 		_, cmd = m.startingGameModel.Update(msg)
+	case BoardView:
+		_, cmd = m.boardModel.Update(msg)
 	}
 
 	return m, cmd
@@ -112,6 +116,15 @@ func (m *Model) View() string {
 			lipgloss.Center,
 			lipgloss.Center,
 			m.startingGameModel.View(),
+		),
+		)
+	case BoardView:
+		sb.WriteString(lipgloss.Place(
+			m.width,
+			m.height-4,
+			lipgloss.Center,
+			lipgloss.Center,
+			m.boardModel.View(),
 		),
 		)
 	}

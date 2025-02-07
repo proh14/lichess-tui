@@ -34,11 +34,20 @@ func New(msg message.LoadBoard) *Model {
 		msg:  msg,
 	}
 
+	board := game.Position().Board()
+
+	switch msg.Data.Game.Color {
+	case "black":
+		board = board.Flip(chess.LeftRight)
+	case "white":
+		board = board.Flip(chess.UpDown)
+	}
+
 	for i := 0; i < 8; i++ {
 		for j := 0; j < 8; j++ {
 			index := chess.NewSquare(chess.File(j), chess.Rank(i))
 			string := ""
-			switch game.Position().Board().SquareMap()[index] {
+			switch board.Piece(index) {
 			case chess.NoPiece:
 				string = ""
 			case chess.BlackKing:

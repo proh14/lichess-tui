@@ -36,10 +36,9 @@ func StreamIncomingEvents(token string, p *tea.Program) {
 
 	for dec.More() {
 		dec.Decode(&IncomingEventsData)
-		if changed && IncomingEventsData == lastIncomingEventsData {
-			continue
-		} else {
+		if !changed || IncomingEventsData != lastIncomingEventsData {
 			lastIncomingEventsData = IncomingEventsData
+			changed = true
 
 			switch {
 			case IncomingEventsData.Type == "gameStart":

@@ -1,7 +1,7 @@
 package message
 
 import (
-	"lichess-tui/internal/requests"
+	"lichess-tui/internal/requests/requestTypes"
 )
 
 type StartGame struct {
@@ -12,5 +12,5 @@ type StartGame struct {
 type LoadBoard struct {
 	Time      uint
 	Increment uint
-	Data      requests.IncomingEvents
+	Data      requestTypes.IncomingEvents
 }

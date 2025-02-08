@@ -7,17 +7,10 @@ import (
 	"net/http"
 
 	"lichess-tui/internal/errors"
+	"lichess-tui/internal/requests/requestTypes"
 )
 
-// https://lichess.org/api#tag/OAuth/operation/tokenTest
-type TokenInfo struct {
-	// Using pointers in order to handle null
-	Scopes  *string `json:"scopes"`
-	UserID  *string `json:"userId"`
-	Expires *uint64 `json:"expires"`
-}
-
-func GetTokenInfo(token string) TokenInfo {
+func GetTokenInfo(token string) requestTypes.TokenInfo {
 	req, err := http.NewRequest(
 		POST,
 		"https://lichess.org/api/token/test",
@@ -36,12 +29,12 @@ func GetTokenInfo(token string) TokenInfo {
 
 	respBody, _ := io.ReadAll(resp.Body)
 
-	var respMap map[string]TokenInfo
+	var respMap map[string]requestTypes.TokenInfo
 	json.Unmarshal(respBody, &respMap)
 
 	return respMap[token]
 }
 
 func TokenExists(token string) bool {
-	return GetTokenInfo(token) != TokenInfo{nil, nil, nil}
+	return GetTokenInfo(token) != requestTypes.TokenInfo{nil, nil, nil}
 }

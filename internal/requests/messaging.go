@@ -7,14 +7,10 @@ import (
 	"net/url"
 
 	"lichess-tui/internal/errors"
+	"lichess-tui/internal/requests/requestTypes"
 )
 
-// https://lichess.org/api#tag/Messaging/operation/inboxUsername
-type SendMessageConfig struct {
-	Text string `json:"text"`
-}
-
-func SendMessage(user string, body SendMessageConfig, token string) {
+func SendMessage(user string, body requestTypes.SendMessageConfig, token string) {
 	url, _ := url.JoinPath("https://lichess.org/inbox", user)
 	bodyBytes, _ := json.Marshal(body)
 

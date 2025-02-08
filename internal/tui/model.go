@@ -5,6 +5,7 @@ import (
 
 	"lichess-tui/internal/config"
 	"lichess-tui/internal/requests"
+	"lichess-tui/internal/requests/requestTypes"
 	"lichess-tui/internal/tui/board"
 	"lichess-tui/internal/tui/message"
 	"lichess-tui/internal/tui/quickgame"
@@ -28,7 +29,7 @@ type Model struct {
 	startingGameModel *starting.Model
 	boardModel        *board.Model
 	title             string
-	profile           requests.Profile
+	profile           requestTypes.Profile
 	status            string
 	loaded            bool
 	height            int
@@ -60,7 +61,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.loaded = true
 	case message.StartGame:
 		cfg := config.GetConfig()
-		go requests.SeekGame(requests.SeekGameConfig{Time: msg.Time, Increment: msg.Increment}, cfg.Token)
+		go requests.SeekGame(requestTypes.SeekGameConfig{Time: msg.Time, Increment: msg.Increment}, cfg.Token)
 		m.viewState = StartingGameView
 		m.startingGameModel = starting.New(msg.Time, msg.Increment)
 	case message.LoadBoard:

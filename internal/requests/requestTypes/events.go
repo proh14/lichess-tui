@@ -1,5 +1,4 @@
 package requestTypes
-
 // https://lichess.org/api/stream/event
 type IncomingEvents struct {
 	Type string `json:"type"`
@@ -80,5 +79,4 @@ type IncomingEvents struct {
 		DeclineReasonKey string `json:"declineReasonKey"`
 	} `json:"challenge"`
 }
-
 

@@ -28,23 +28,24 @@ func New(msg message.LoadBoard) *Model {
 	fen, _ := chess.FEN(msg.Data.Game.Fen)
 	game := chess.NewGame(fen)
 
+	board := game.Position().Board()
+	// msg.data.game.color
+	color := msg.Data.Game.Color
 	model := &Model{
 		game: game,
-		grid: grid.New(8, 8, 5, 2),
+		grid: grid.New(8, 8, 5, 2, color),
 		msg:  msg,
 	}
 
-	board := game.Position().Board()
-
-	switch msg.Data.Game.Color {
-	case "black":
+	switch color {
+	case grid.BLACK:
 		board = board.Flip(chess.LeftRight)
-	case "white":
+	case grid.WHITE:
 		board = board.Flip(chess.UpDown)
 	}
 
-	for i := 0; i < 8; i++ {
-		for j := 0; j < 8; j++ {
+	for i := range 8 {
+		for j := range 8 {
 			index := chess.NewSquare(chess.File(j), chess.Rank(i))
 			string := ""
 			switch board.Piece(index) {

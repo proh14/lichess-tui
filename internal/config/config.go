@@ -2,12 +2,11 @@ package config
 
 import (
 	"errors"
+	"lichess-tui/internal/lichess"
+	"lichess-tui/internal/security"
 	"log"
 	"os"
 	"path/filepath"
-
-	"lichess-tui/internal/lichess"
-	"lichess-tui/internal/security"
 
 	"github.com/charmbracelet/huh"
 	"gopkg.in/yaml.v2"
@@ -127,7 +126,7 @@ func LoadConfig(path string) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			setupConfig(path)
+			// setupConfig(path)
 			return nil
 		}
 	}

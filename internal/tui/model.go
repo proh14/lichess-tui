@@ -1,8 +1,6 @@
 package tui
 
 import (
-	"strings"
-
 	"lichess-tui/internal/config"
 	"lichess-tui/internal/requests"
 	"lichess-tui/internal/requests/requestTypes"
@@ -10,6 +8,7 @@ import (
 	"lichess-tui/internal/tui/message"
 	"lichess-tui/internal/tui/quickgame"
 	"lichess-tui/internal/tui/starting"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -18,10 +17,12 @@ import (
 type viewState uint
 
 const (
-	QuickGameView = iota
+	QuickGameView viewState = iota
 	StartingGameView
 	BoardView
 )
+
+type StartBoardMsg struct{}
 
 type Model struct {
 	viewState         viewState
@@ -41,8 +42,9 @@ func NewModel() *Model {
 	profile := requests.GetProfile(cfg.Token)
 
 	return &Model{
-		viewState:      QuickGameView,
+		viewState:      BoardView,
 		quickGameModel: quickgame.New(0, 0),
+		boardModel:     board.New(message.LoadBoard{}),
 		loaded:         false,
 		profile:        profile,
 		status:         "\nPress 'q' to quit",

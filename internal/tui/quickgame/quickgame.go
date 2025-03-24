@@ -2,7 +2,6 @@ package quickgame
 
 import (
 	"fmt"
-
 	"lichess-tui/internal/tui/grid"
 	"lichess-tui/internal/tui/message"
 
@@ -44,9 +43,10 @@ type Model struct {
 	grid *grid.Model
 }
 
+// NOT WORKING
 func New(height, width uint) *Model {
 	model := &Model{
-		grid: grid.New(3, 4, 13, 3),
+		grid: grid.New(3, 4, 13, 3, grid.WHITE),
 	}
 
 	for i := 0; i < len(timeFormats); i++ {

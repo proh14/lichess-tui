@@ -4,16 +4,24 @@ import (
 	"lichess-tui/internal/tui/grid"
 	"lichess-tui/internal/tui/message"
 	"math"
+	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/notnil/chess"
 )
 
+const (
+	ChoosingStarting int = iota
+	ChoosingEnding
+)
+
 type Model struct {
 	game *chess.Game
 	grid *grid.Model
-	current_piece chess.Piece
+	startingSquare chess.Square
+	endingSquare chess.Square
+	mode int
 	msg  message.LoadBoard
 }
 
@@ -93,11 +101,34 @@ func (m *Model) Init() tea.Cmd {
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.grid.Update(msg)
 	
-	x := math.Floor(float64(m.grid.CurrentSquare) / 8.0);
+	x := math.Abs(7 - math.Floor(float64(m.grid.CurrentSquare) / 8.0));
 	y := m.grid.CurrentSquare % 8;
 
-	index := chess.Piece(chess.NewSquare(chess.File(x), chess.Rank(y)));
-	m.current_piece = index;
+	index := chess.NewSquare(chess.File(y), chess.Rank(x));
+
+	enter_pressed := false;
+	if msg, ok := msg.(tea.KeyMsg); ok {
+		if msg.Type == tea.KeyEnter {
+			enter_pressed = true;
+		}
+	}
+
+	switch m.mode {
+		case ChoosingStarting:
+			m.startingSquare = index;
+			if enter_pressed {
+				m.mode = ChoosingEnding;
+			}
+		case ChoosingEnding:
+			m.endingSquare = index;
+			if enter_pressed {
+				move, _ := chess.LongAlgebraicNotation{}.Decode(m.game.Position(), m.startingSquare.String() + m.endingSquare.String());
+				m.game.Move(move);
+				fmt.Println(m.game.Position());
+
+				m.mode = ChoosingStarting;
+			}
+	}
 
 	return m, nil
 }

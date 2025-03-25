@@ -126,7 +126,7 @@ func LoadConfig(path string) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			// setupConfig(path)
+			setupConfig(path)
 			return nil
 		}
 	}

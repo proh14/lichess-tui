@@ -3,6 +3,7 @@ package board
 import (
 	"lichess-tui/internal/tui/grid"
 	"lichess-tui/internal/tui/message"
+	"math"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -12,6 +13,7 @@ import (
 type Model struct {
 	game *chess.Game
 	grid *grid.Model
+	current_piece chess.Piece
 	msg  message.LoadBoard
 }
 
@@ -90,6 +92,12 @@ func (m *Model) Init() tea.Cmd {
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.grid.Update(msg)
+	
+	x := math.Floor(float64(m.grid.CurrentSquare) / 8.0);
+	y := m.grid.CurrentSquare % 8;
+
+	index := chess.Piece(chess.NewSquare(chess.File(x), chess.Rank(y)));
+	m.current_piece = index;
 
 	return m, nil
 }

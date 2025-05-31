@@ -5,23 +5,15 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-const (
-	WHITE = "white"
-	BLACK = "black"
-)
-
 var (
-	squareOddStyle = lipgloss.NewStyle().
+	squareStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
 			AlignVertical(lipgloss.Center).
 			Align(lipgloss.Center)
-	squareEvenStyle = squareOddStyle.Bold(true).
-			BorderForeground(lipgloss.Color("#00D8BD")).
-			Foreground(lipgloss.Color("#00D8BD"))
 
-	foucusedSquareStyle = squareOddStyle.Bold(true).
-				BorderForeground(lipgloss.Color("#a834eb")).
-				Foreground(lipgloss.Color("#a834eb"))
+	foucusedSquareStyle = squareStyle.Bold(true).
+				BorderForeground(lipgloss.Color("#00D8BD")).
+				Foreground(lipgloss.Color("#00D8BD"))
 )
 
 type Model struct {
@@ -31,10 +23,9 @@ type Model struct {
 	CurrentSquare int
 	SquaresWidth  int
 	SquaresHeight int
-	Color         string
 }
 
-func New(cols, rows, width, height int, color string) *Model {
+func New(cols, rows, width, height int) *Model {
 	return &Model{
 		Cols:          cols,
 		Rows:          rows,
@@ -42,7 +33,6 @@ func New(cols, rows, width, height int, color string) *Model {
 		SquaresHeight: height,
 		Squares:       make([]string, rows*cols),
 		CurrentSquare: 0,
-		Color:         color,
 	}
 }
 
@@ -50,36 +40,21 @@ func (g *Model) Init() tea.Cmd {
 	return nil
 }
 
-func IsWhite(color string) int {
-	if color == WHITE {
-		return 1
-	} else {
-		return 0
-	}
-}
-
 func (g *Model) View() string {
-	styleOdd := squareOddStyle.Width(g.SquaresWidth).Height(g.SquaresHeight)
-	styleEven := squareEvenStyle.Width(g.SquaresWidth).Height(g.SquaresHeight)
+	style := squareStyle.Width(g.SquaresWidth).Height(g.SquaresHeight)
 	focusedStyle := foucusedSquareStyle.Width(g.SquaresWidth).Height(g.SquaresHeight)
 
 	tempsquares := make([]string, g.Rows*g.Cols)
-	for i, square := range g.Squares {
-		n := i + 1
-		row := (n - 1) / g.Rows
-		col := (n - 1) % g.Rows
-		if i == g.CurrentSquare {
-			tempsquares[i] = focusedStyle.Render(square)
-		} else if (row+col)%2 == IsWhite(g.Color) {
-			tempsquares[i] = styleEven.Render(square)
+	for square := range g.Squares {
+		if square == g.CurrentSquare {
+			tempsquares[square] = focusedStyle.Render(g.Squares[square])
 		} else {
-			tempsquares[i] = styleOdd.Render(square)
+			tempsquares[square] = style.Render(g.Squares[square])
 		}
 	}
 
 	rows := make([]string, g.Rows)
-
-	for i := range rows {
+	for i := 0; i < g.Rows; i++ {
 		rows[i] = lipgloss.JoinHorizontal(lipgloss.Center, tempsquares[i*g.Cols:(i+1)*g.Cols]...)
 	}
 
@@ -126,3 +101,4 @@ func (g *Model) Down() {
 		g.CurrentSquare += g.Cols
 	}
 }
+

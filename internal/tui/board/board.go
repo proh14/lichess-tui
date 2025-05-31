@@ -1,97 +1,36 @@
 package board
 
 import (
-	"lichess-tui/internal/tui/grid"
-	"lichess-tui/internal/tui/message"
-	"math"
-	"fmt"
-
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/notnil/chess"
 )
 
-const (
-	ChoosingStarting int = iota
-	ChoosingEnding
+var (
+	whiteSquareStyle = lipgloss.NewStyle().
+				Width(10).
+				Height(5).
+				Align(lipgloss.Center).
+				Background(lipgloss.Color("#f0f0f0")).
+				Foreground(lipgloss.Color("#000000")).
+				Bold(true)
+	blackSquareStyle = lipgloss.NewStyle().
+				Align(lipgloss.Center).
+				Width(10).
+				Height(5).
+				Background(lipgloss.Color("#333333")).
+				Bold(true)
 )
 
 type Model struct {
-	game *chess.Game
-	grid *grid.Model
-	startingSquare chess.Square
-	endingSquare chess.Square
-	mode int
-	msg  message.LoadBoard
+	Board *chess.Board
 }
 
-var viewStyle = lipgloss.NewStyle().
-	Border(lipgloss.RoundedBorder()).
-	BorderForeground(lipgloss.Color("#00D8BD")).
-	Width(40).
-	Height(10).
-	Bold(true).
-	Align(lipgloss.Center).
-	AlignVertical(lipgloss.Center)
-
-func New(msg message.LoadBoard) *Model {
-	fen, _ := chess.FEN(msg.Data.Game.Fen)
-	game := chess.NewGame(fen)
-
-	board := game.Position().Board()
-	// msg.data.game.color
-	color := msg.Data.Game.Color
-	model := &Model{
-		game: game,
-		grid: grid.New(8, 8, 5, 2, color),
-		msg:  msg,
+func New() *Model {
+	b := chess.NewBoard(chess.StartingPosition().Board().SquareMap())
+	return &Model{
+		Board: b,
 	}
-
-	switch color {
-	case grid.BLACK:
-		board = board.Flip(chess.LeftRight)
-	case grid.WHITE:
-		board = board.Flip(chess.UpDown)
-	}
-
-	for i := range 8 {
-		for j := range 8 {
-			index := chess.NewSquare(chess.File(j), chess.Rank(i))
-			string := ""
-			switch board.Piece(index) {
-			case chess.NoPiece:
-				string = ""
-			case chess.BlackKing:
-				string = "♔"
-			case chess.BlackQueen:
-				string = "♕"
-			case chess.BlackRook:
-				string = "♖"
-			case chess.BlackBishop:
-				string = "♗"
-			case chess.BlackKnight:
-				string = "♘"
-			case chess.BlackPawn:
-				string = "♙"
-			case chess.WhiteKing:
-				string = "♚"
-			case chess.WhiteQueen:
-				string = "♛"
-			case chess.WhiteRook:
-				string = "♜"
-			case chess.WhiteBishop:
-				string = "♝"
-			case chess.WhiteKnight:
-				string = "♞"
-			case chess.WhitePawn:
-				string = "♟"
-			}
-
-			model.grid.Squares[index] = string
-		}
-	}
-
-	return model
 }
 
 func (m *Model) Init() tea.Cmd {
@@ -99,40 +38,32 @@ func (m *Model) Init() tea.Cmd {
 }
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	m.grid.Update(msg)
-	
-	x := math.Abs(7 - math.Floor(float64(m.grid.CurrentSquare) / 8.0));
-	y := m.grid.CurrentSquare % 8;
-
-	index := chess.NewSquare(chess.File(y), chess.Rank(x));
-
-	enter_pressed := false;
-	if msg, ok := msg.(tea.KeyMsg); ok {
-		if msg.Type == tea.KeyEnter {
-			enter_pressed = true;
-		}
-	}
-
-	switch m.mode {
-		case ChoosingStarting:
-			m.startingSquare = index;
-			if enter_pressed {
-				m.mode = ChoosingEnding;
-			}
-		case ChoosingEnding:
-			m.endingSquare = index;
-			if enter_pressed {
-				move, _ := chess.LongAlgebraicNotation{}.Decode(m.game.Position(), m.startingSquare.String() + m.endingSquare.String());
-				m.game.Move(move);
-				fmt.Println(m.game.Position());
-
-				m.mode = ChoosingStarting;
-			}
-	}
-
 	return m, nil
 }
 
 func (m *Model) View() string {
-	return m.grid.View()
+	squares := make([]string, 64)
+
+	for r := 7; r >= 0; r-- {
+		s := ""
+		for f := 0; f < 8; f++ {
+			p := m.Board.Piece(chess.NewSquare(chess.File(f), chess.Rank(r)))
+			if p != chess.NoPiece {
+				s = p.String()
+			}
+			s += " "
+			if (r+f)%2 == 0 {
+				squares[r*8+f] = whiteSquareStyle.Render(s)
+			} else {
+				squares[r*8+f] = blackSquareStyle.Render(s)
+			}
+		}
+	}
+
+	rows := make([]string, 8)
+
+	for r := 0; r < 8; r++ {
+		rows[r] = lipgloss.JoinHorizontal(lipgloss.Center, squares[r*8:(r+1)*8]...)
+	}
+	return lipgloss.JoinVertical(lipgloss.Left, rows...)
 }

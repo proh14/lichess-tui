@@ -44,7 +44,7 @@ func NewModel() *Model {
 	return &Model{
 		viewState:      BoardView,
 		quickGameModel: quickgame.New(0, 0),
-		boardModel:     board.New(message.LoadBoard{}),
+		boardModel:     board.New(),
 		loaded:         false,
 		profile:        profile,
 		status:         "\nPress 'q' to quit",
@@ -66,9 +66,6 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		go requests.SeekGame(requestTypes.SeekGameConfig{Time: msg.Time, Increment: msg.Increment}, cfg.Token)
 		m.viewState = StartingGameView
 		m.startingGameModel = starting.New(msg.Time, msg.Increment)
-	case message.LoadBoard:
-		m.viewState = BoardView
-		m.boardModel = board.New(msg)
 	case tea.KeyMsg:
 		if msg.String() == "q" {
 			return m, tea.Quit

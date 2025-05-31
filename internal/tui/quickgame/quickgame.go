@@ -43,10 +43,9 @@ type Model struct {
 	grid *grid.Model
 }
 
-// NOT WORKING
 func New(height, width uint) *Model {
 	model := &Model{
-		grid: grid.New(3, 4, 13, 3, grid.WHITE),
+		grid: grid.New(3, 4, 13, 3),
 	}
 
 	for i := 0; i < len(timeFormats); i++ {

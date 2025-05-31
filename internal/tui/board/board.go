@@ -8,16 +8,16 @@ import (
 
 var (
 	whiteSquareStyle = lipgloss.NewStyle().
-				Width(10).
-				Height(5).
+				Width(6).
+				Height(3).
 				Align(lipgloss.Center).
 				Background(lipgloss.Color("#f0f0f0")).
 				Foreground(lipgloss.Color("#000000")).
 				Bold(true)
 	blackSquareStyle = lipgloss.NewStyle().
 				Align(lipgloss.Center).
-				Width(10).
-				Height(5).
+				Width(6).
+				Height(3).
 				Background(lipgloss.Color("#333333")).
 				Bold(true)
 )
@@ -42,11 +42,11 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *Model) View() string {
-	squares := make([]string, 64)
+	squares := make([]string, 8*8)
 
 	for r := 7; r >= 0; r-- {
-		s := ""
 		for f := 0; f < 8; f++ {
+			s := ""
 			p := m.Board.Piece(chess.NewSquare(chess.File(f), chess.Rank(r)))
 			if p != chess.NoPiece {
 				s = p.String()
